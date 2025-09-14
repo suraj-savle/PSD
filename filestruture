@@ -1,0 +1,88 @@
+# 📂 Final File Structure
+
+```
+PSD/
+│── backend/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.js
+│   │   ├── middleware/
+│   │   │   └── authMiddleware.js
+│   │   ├── routes/
+│   │   │   ├── auth.js
+│   │   │   ├── student.js
+│   │   │   ├── sag.js
+│   │   │   └── finance.js
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── studentController.js
+│   │   │   ├── sagController.js
+│   │   │   └── financeController.js
+│   │   ├── utils/
+│   │   │   └── generateToken.js
+│   │   └── index.js
+│   ├── .env
+│   ├── package.json
+│   └── README.md
+│
+│── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── UploadDocs.jsx
+│   │   │   └── StatusCard.jsx
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── StudentDashboard.jsx
+│   │   │   ├── SAGDashboard.jsx
+│   │   │   └── FinanceDashboard.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   ├── package.json
+│   └── README.md
+│
+│── .gitignore
+│── README.md
+```
+
+---
+
+# 🗂 What Each Folder Does
+
+### **Backend**
+
+* `prisma/schema.prisma` → database models (User, ScholarshipApplication, enums).
+* `config/db.js` → Prisma client setup.
+* `routes/` → Express routes for auth, student, SAG, finance.
+* `controllers/` → business logic for each route.
+* `middleware/authMiddleware.js` → JWT role-based access.
+* `utils/generateToken.js` → function to generate JWT.
+* `index.js` → entry point (Express app).
+
+### **Frontend**
+
+* `components/` → reusable UI (Navbar, UploadDocs, StatusCard).
+* `pages/` → main screens (Login, Register, dashboards).
+* `context/AuthContext.jsx` → global auth state.
+* `services/api.js` → Axios instance for API calls.
+* `App.jsx` → routes setup (React Router).
+
+---
+
+⚡ With this structure you can:
+
+* Run backend (`npm run dev`) → APIs live
+* Run frontend (`npm run dev`) → UI live
+* Connect React frontend → Express backend → Prisma DB
+
+---

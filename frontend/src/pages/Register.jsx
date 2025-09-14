@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 export default function Register() {
   const [formData, setFormData] = useState({
     role: "Student",
@@ -34,32 +35,32 @@ export default function Register() {
   };
 
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full  bg-white shadow-xl rounded-2xl overflow-hidden">
+    <div className="w-full h-screen overflow-hidden flex items-center justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full  bg-gray-50 shadow-xl rounded-2xl overflow-hidden">
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-8 md:p-12 bg-gradient-to-b from-purple-600 to-indigo-700 text-white">
+        <div className="flex flex-col items-center justify-center p-8 md:p-12 bg-gradient-to-b">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-3">Already have an account?</h2>
-            <p className="text-purple-100 opacity-90">
+            <p className="">
               Sign in to access your personalized dashboard and continue your journey with us.
             </p>
           </div>
           
-          <button className="bg-white text-purple-700 font-semibold px-8 py-3 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300 transform hover:-translate-y-1">
+          <button className="bg-white font-semibold px-8 py-3 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300 transform hover:-translate-y-1">
             LOGIN NOW
           </button>
 
           <div className="mt-10">
             <img
-              src="https://cdni.iconscout.com/illustration/premium/thumb/mobile-login-4301361-3585008.png"
-              alt="Illustration"
-              className="w-80 mx-auto"
+              src="\public\privacy.png"
+              alt="privacy"
+              className="w-100 mx-auto"
             />
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="p-8 md:p-12">
+        <div className="p-8 md:p-50">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
             <p className="text-gray-500">Join our community and get started</p>

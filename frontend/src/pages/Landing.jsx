@@ -1,0 +1,466 @@
+import { useState, useEffect } from 'react';
+
+export default function Landing() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [language, setLanguage] = useState('english');
+  const [openFaq, setOpenFaq] = useState(null);
+
+  // Background slides data
+  const slides = [
+    {
+      image: "url('/images/pm-scholarship-bg.jpg')",
+      title: {
+        english: "Empowering Education Through PMSSS Scholarships",
+        marathi: "पीएमएसएसएस शिष्यवृत्ती द्वारे शिक्षण सक्षम करणे"
+      },
+      description: {
+        english: "Apply for the Prime Minister's Special Scholarship Scheme online. Track applications, upload documents, and get real-time updates — all on one secure platform.",
+        marathi: "पंतप्रधान विशेष शिष्यवृत्ती योजनेसाठी ऑनलाइन अर्ज करा. अर्ज ट्रॅक करा, दस्तऐवज अपलोड करा आणि रिअल-टाइम अपडेट्स मिळवा — सर्व एका सुरक्षित प्लॅटफॉर्मवर."
+      }
+    },
+    {
+      image: "url('/images/education-bg.jpg')",
+      title: {
+        english: "Supporting Dreams of Higher Education",
+        marathi: "उच्च शिक्षणाचे स्वप्नांना पाठिंबा"
+      },
+      description: {
+        english: "Financial assistance for talented students to pursue education in premier institutions across India.",
+        marathi: "भारतातील प्रमुख संस्थांमध्ये शिक्षण घेण्यासाठी प्रतिभावान विद्यार्थ्यांसाठी आर्थिक सहाय्य."
+      }
+    },
+    {
+      image: "url('/images/students-bg.jpg')",
+      title: {
+        english: "Transparent & Efficient Scholarship Process",
+        marathi: "पारदर्शक आणि कार्यक्षम शिष्यवृत्ती प्रक्रिया"
+      },
+      description: {
+        english: "Our streamlined process ensures fair and timely distribution of scholarships to eligible candidates.",
+        marathi: "आमची सुव्यवस्थित प्रक्रिया पात्र उमेदवारांना शिष्यवृत्तीची वेळेवर आणि न्याय्य वितरण सुनिश्चित करते."
+      }
+    }
+  ];
+
+  // Auto-rotate slides
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  // FAQ data
+  const faqs = [
+    {
+      question: {
+        english: "Who is eligible for PMSSS scholarships?",
+        marathi: "पीएमएसएसएस शिष्यवृत्तीसाठी कोण पात्र आहे?"
+      },
+      answer: {
+        english: "Students from specific regions who have passed their 12th standard with minimum required marks and have secured admission in recognized institutions.",
+        marathi: "विशिष्ट प्रदेशातील विद्यार्थी ज्यांनी आपली 12वी मानक किमान आवश्यक गुणांसह उत्तीर्ण केली आहे आणि मान्यताप्राप्त संस्थांमध्ये प्रवेश सुरक्षित केला आहे."
+      }
+    },
+    {
+      question: {
+        english: "What documents are required for application?",
+        marathi: "अर्जासाठी कोणते दस्तऐवज आवश्यक आहेत?"
+      },
+      answer: {
+        english: "Typically, you need educational certificates, income proof, identity proof, bank details, and admission proof.",
+        marathi: "सामान्यत:, आपल्याला शैक्षणिक प्रमाणपत्रे, उत्पन्न दाखला, ओळखपत्र, बँक तपशील आणि प्रवेश दाखला आवश्यक आहे."
+      }
+    },
+    {
+      question: {
+        english: "How long does the application process take?",
+        marathi: "अर्ज प्रक्रियेस किती वेळ लागतो?"
+      },
+      answer: {
+        english: "The application review typically takes 2-3 weeks after all documents are submitted correctly.",
+        marathi: "सर्व दस्तऐवज योग्यरित्या सादर केल्यानंतर अर्ज पुनरावलोकनास सामान्यत: 2-3 आठवडे लागतात."
+      }
+    },
+    {
+      question: {
+        english: "Can I edit my application after submission?",
+        marathi: "सबमिशन नंतर मी माझा अर्ज संपादित करू शकतो का?"
+      },
+      answer: {
+        english: "Yes, you can edit your application within 7 days of submission or until it's under review, whichever comes first.",
+        marathi: "होय, सबमिशनच्या 7 दिवसांच्या आत किंवा तो पुनरावलोकनाधीन असताना आपण आपला अर्ज संपादित करू शकता, यापैकी जे आधी असेल."
+      }
+    }
+  ];
+
+  // Content based on selected language
+  const content = {
+    nav: {
+      features: {
+        english: "Features",
+        marathi: "वैशिष्ट्ये"
+      },
+      about: {
+        english: "About",
+        marathi: "विषयी"
+      },
+      faq: {
+        english: "FAQ",
+        marathi: "सामान्य प्रश्न"
+      },
+      contact: {
+        english: "Contact",
+        marathi: "संपर्क"
+      },
+      login: {
+        english: "Login",
+        marathi: "लॉगिन"
+      },
+      register: {
+        english: "Register",
+        marathi: "नोंदणी करा"
+      }
+    },
+    hero: {
+      apply: {
+        english: "Apply Now",
+        marathi: "आता अर्ज करा"
+      },
+      learn: {
+        english: "Learn More",
+        marathi: "अधिक जाणून घ्या"
+      }
+    },
+    features: {
+      title: {
+        english: "Key Features",
+        marathi: "मुख्य वैशिष्ट्ये"
+      }
+    },
+    about: {
+      title: {
+        english: "About PMSSS",
+        marathi: "पीएमएसएसएस विषयी"
+      },
+      description: {
+        english: "The Prime Minister's Special Scholarship Scheme (PMSSS) is an initiative to support higher education for deserving students. This portal ensures transparency, efficiency, and accessibility in the scholarship process.",
+        marathi: "पंतप्रधान विशेष शिष्यवृत्ती योजना (पीएमएसएसएस) ही पात्र विद्यार्थ्यांसाठी उच्च शिक्षणाला पाठिंबा देण्याची एक उपक्रम आहे. हे पोर्टल शिष्यवृत्ती प्रक्रियेमध्ये पारदर्शकता, कार्यक्षमता आणि प्रवेशयोग्यता सुनिश्चित करते."
+      }
+    },
+    faqSection: {
+      title: {
+        english: "Frequently Asked Questions",
+        marathi: "वारंवार विचारले जाणारे प्रश्न"
+      }
+    },
+    contact: {
+      title: {
+        english: "Contact Us",
+        marathi: "आमच्याशी संपर्क साधा"
+      },
+      description: {
+        english: "Have questions? Reach out to our support team.",
+        marathi: "प्रश्न आहेत? आमच्या समर्थन संघाशी संपर्क साधा."
+      },
+      button: {
+        english: "Email Support",
+        marathi: "ईमेल समर्थन"
+      }
+    },
+    footer: {
+      text: {
+        english: "© 2025 PMSSS Portal. All rights reserved.",
+        marathi: "© 2025 पीएमएसएसएस पोर्टल. सर्व हक्क राखीव."
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Navbar */}
+      <header className="bg-white shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <span className="text-2xl font-bold text-blue-700">
+                PMSSS Portal
+              </span>
+            </div>
+            
+            <nav className="hidden md:flex space-x-6 items-center">
+              <a href="#features" className="text-gray-600 hover:text-blue-700 transition-colors">
+                {content.nav.features[language]}
+              </a>
+              <a href="#about" className="text-gray-600 hover:text-blue-700 transition-colors">
+                {content.nav.about[language]}
+              </a>
+              <a href="#faq" className="text-gray-600 hover:text-blue-700 transition-colors">
+                {content.nav.faq[language]}
+              </a>
+              <a href="#contact" className="text-gray-600 hover:text-blue-700 transition-colors">
+                {content.nav.contact[language]}
+              </a>
+              
+              {/* Language Toggle */}
+              <div className="flex items-center ml-4">
+                <button 
+                  onClick={() => setLanguage('english')}
+                  className={`px-2 py-1 rounded-l-md ${language === 'english' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                >
+                  EN
+                </button>
+                <button 
+                  onClick={() => setLanguage('marathi')}
+                  className={`px-2 py-1 rounded-r-md ${language === 'marathi' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                >
+                  MR
+                </button>
+              </div>
+            </nav>
+            
+            <div className="flex space-x-4 items-center">
+              <a
+                href="/login"
+                className="px-4 py-2 border border-blue-600 rounded-md transition-colors text-blue-600 hover:bg-blue-600 hover:text-white"
+              >
+                {content.nav.login[language]}
+              </a>
+              <a
+                href="/register"
+                className="px-4 py-2 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700"
+              >
+                {content.nav.register[language]}
+              </a>
+              
+              {/* Mobile menu button */}
+              <div className="md:hidden ml-2">
+                <button className="text-gray-600 hover:text-blue-700 focus:outline-none">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section with Auto-sliding Background */}
+      <main className="flex-grow">
+        <section className="py-20 relative bg-cover bg-center h-[500px] overflow-hidden">
+          {/* Slides */}
+          {slides.map((slide, index) => (
+            <div 
+              key={index}
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ backgroundImage: slide.image }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-900/70 to-blue-800/60"></div>
+            </div>
+          ))}
+          
+          {/* Slide indicators */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-3 w-3 rounded-full transition-colors ${
+                  index === currentSlide ? 'bg-white' : 'bg-white/50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white h-full flex flex-col justify-center">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in">
+              {slides[currentSlide].title[language]}
+            </h1>
+            <p className="mt-4 text-lg max-w-3xl mx-auto text-blue-100 animate-fade-in-delay">
+              {slides[currentSlide].description[language]}
+            </p>
+            <div className="mt-8 flex justify-center gap-4 animate-fade-in-delay-2">
+              <a
+                href="/register"
+                className="px-6 py-3 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700 shadow-md"
+              >
+                {content.hero.apply[language]}
+              </a>
+              <a
+                href="#about"
+                className="px-6 py-3 rounded-md border border-white transition-colors text-white hover:bg-white/10"
+              >
+                {content.hero.learn[language]}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="py-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+              {content.features.title[language]}
+            </h2>
+            <div className="grid gap-10 md:grid-cols-3">
+              {[
+                {
+                  title: {
+                    english: "Digital Application",
+                    marathi: "डिजिटल अर्ज"
+                  },
+                  desc: {
+                    english: "Apply online without paperwork, saving time and effort.",
+                    marathi: "कागदपत्रे न करता ऑनलाइन अर्ज करा, वेळ आणि श्रम वाचवा."
+                  },
+                  icon: (
+                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  )
+                },
+                {
+                  title: {
+                    english: "Document Upload",
+                    marathi: "दस्तऐवज अपलोड"
+                  },
+                  desc: {
+                    english: "Securely upload and verify required documents online.",
+                    marathi: "ऑनलाइन आवश्यक दस्तऐवज सुरक्षितपणे अपलोड करा आणि सत्यापित करा."
+                  },
+                  icon: (
+                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                    </svg>
+                  )
+                },
+                {
+                  title: {
+                    english: "Real-time Tracking",
+                    marathi: "रिअल-टाइम ट्रॅकिंग"
+                  },
+                  desc: {
+                    english: "Track your scholarship application at every stage.",
+                    marathi: "प्रत्येक टप्प्यावर आपला शिष्यवृत्ती अर्ज ट्रॅक करा."
+                  },
+                  icon: (
+                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  )
+                },
+              ].map((f, i) => (
+                <div
+                  key={i}
+                  className="p-6 rounded-lg shadow-lg bg-white text-center transition-transform hover:scale-105 hover:shadow-xl"
+                >
+                  {f.icon}
+                  <h3 className="text-xl font-semibold mb-2 text-blue-700">
+                    {f.title[language]}
+                  </h3>
+                  <p className="text-gray-600">{f.desc[language]}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold mb-6 text-gray-800">
+              {content.about.title[language]}
+            </h2>
+            <p className="max-w-3xl mx-auto text-lg text-gray-600">
+              {content.about.description[language]}
+            </p>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section id="faq" className="py-20 bg-white">
+          <div className="max-w-4xl mx-auto px-6">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+              {content.faqSection.title[language]}
+            </h2>
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div key={index} className="border rounded-lg overflow-hidden">
+                  <button
+                    className="flex justify-between items-center w-full p-4 text-left font-medium text-blue-800 bg-blue-50 hover:bg-blue-100 transition-colors"
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  >
+                    <span>{faq.question[language]}</span>
+                    <svg 
+                      className={`w-5 h-5 transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === index ? 'max-h-96' : 'max-h-0'}`}>
+                    <div className="p-4 text-gray-600 bg-white">
+                      {faq.answer[language]}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold mb-6 text-gray-800">
+              {content.contact.title[language]}
+            </h2>
+            <p className="mb-8 text-gray-600">
+              {content.contact.description[language]}
+            </p>
+            <a
+              href="mailto:support@pmsss.gov"
+              className="px-6 py-3 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700 inline-block"
+            >
+              {content.contact.button[language]}
+            </a>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white shadow-md py-8">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-gray-600">
+            {content.footer.text[language]}
+          </p>
+        </div>
+      </footer>
+
+      {/* Custom styles for animations */}
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-out forwards;
+        }
+        .animate-fade-in-delay {
+          animation: fade-in 1s ease-out 0.3s forwards;
+          opacity: 0;
+        }
+        .animate-fade-in-delay-2 {
+          animation: fade-in 1s ease-out 0.6s forwards;
+          opacity: 0;
+        }
+      `}</style>
+    </div>
+  );
+}

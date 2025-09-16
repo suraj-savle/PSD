@@ -57,32 +57,46 @@ PSD/
 
 ---
 
-# 🗂 What Each Folder Does
+🎯 Must-Have Features (only as per problem)
 
-### **Backend**
+Student Side
 
-* `prisma/schema.prisma` → database models (User, ScholarshipApplication, enums).
-* `config/db.js` → Prisma client setup.
-* `routes/` → Express routes for auth, student, SAG, finance.
-* `controllers/` → business logic for each route.
-* `middleware/authMiddleware.js` → JWT role-based access.
-* `utils/generateToken.js` → function to generate JWT.
-* `index.js` → entry point (Express app).
+Register/Login.
 
-### **Frontend**
+Upload documents.
 
-* `components/` → reusable UI (Navbar, UploadDocs, StatusCard).
-* `pages/` → main screens (Login, Register, dashboards).
-* `context/AuthContext.jsx` → global auth state.
-* `services/api.js` → Axios instance for API calls.
-* `App.jsx` → routes setup (React Router).
+View submission status.
 
----
+Get notifications (basic UI message).
 
-⚡ With this structure you can:
+SAG Bureau Side
 
-* Run backend (`npm run dev`) → APIs live
-* Run frontend (`npm run dev`) → UI live
-* Connect React frontend → Express backend → Prisma DB
+See uploaded docs.
+
+Mark as verified/rejected.
+
+Finance Bureau Side
+
+See verified docs.
+
+Mark disbursed.
+
+System
+
+Authentication (basic email-password).
+
+Secure file upload.
+
+Status tracking from upload → verification → payment.
+
+🛠️ Tech Stack (fastest to implement)
+
+Frontend: React + Tailwind CSS (your strength).
+
+Backend: Node.js + Express (only minimal APIs).
+
+Database: MongoDB (for user, documents, status).
+
+Storage: Local folder / MongoDB GridFS (skip AWS/GCP for hackathon).
 
 ---

@@ -67,7 +67,7 @@ export default function Register() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Role */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">I am a</label>
               <select
                 name="role"
@@ -79,7 +79,7 @@ export default function Register() {
                 <option>SAG</option>
                 <option>Finance</option>
               </select>
-            </div>
+            </div> */}
 
             {/* Full Name */}
             <div>
@@ -89,7 +89,7 @@ export default function Register() {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
@@ -97,12 +97,13 @@ export default function Register() {
             {/* Phone */}
             <div>
               <input
-                type="tel"
+                type="number"
                 name="phone"
                 placeholder="+91 Phone Number"
+                maxLength={10}
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
@@ -115,7 +116,7 @@ export default function Register() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
@@ -128,7 +129,7 @@ export default function Register() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 required
               />
             </div>
@@ -143,7 +144,7 @@ export default function Register() {
                   placeholder="Enter OTP"
                   value={formData.otp}
                   onChange={handleChange}
-                  className="flex-1 border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  className="flex-1 border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   required
                 />
                 <button

@@ -8,7 +8,7 @@ export default function Landing() {
   // Background slides data
   const slides = [
     {
-      image: "url('/images/pm-scholarship-bg.jpg')",
+      image: "url('/images/pm-scholarship-bg.jpeg')",
       title: {
         english: "Empowering Education Through PMSSS Scholarships",
         marathi: "पीएमएसएसएस शिष्यवृत्ती द्वारे शिक्षण सक्षम करणे"
@@ -19,7 +19,7 @@ export default function Landing() {
       }
     },
     {
-      image: "url('/images/education-bg.jpg')",
+      image: "url('/images/education-bg.jpeg')",
       title: {
         english: "Supporting Dreams of Higher Education",
         marathi: "उच्च शिक्षणाचे स्वप्नांना पाठिंबा"
@@ -30,7 +30,7 @@ export default function Landing() {
       }
     },
     {
-      image: "url('/images/students-bg.jpg')",
+      image: "url('/images/students-bg.jpeg')",
       title: {
         english: "Transparent & Efficient Scholarship Process",
         marathi: "पारदर्शक आणि कार्यक्षम शिष्यवृत्ती प्रक्रिया"
@@ -248,7 +248,7 @@ export default function Landing() {
 
       {/* Hero Section with Auto-sliding Background */}
       <main className="flex-grow">
-        <section className="py-20 relative bg-cover bg-center h-[500px] overflow-hidden">
+        <section className="py-20 relative bg-cover bg-center h-[600px] overflow-hidden">
           {/* Slides */}
           {slides.map((slide, index) => (
             <div 
@@ -258,7 +258,7 @@ export default function Landing() {
               }`}
               style={{ backgroundImage: slide.image }}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-blue-900/70 to-blue-800/60"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-gray-900/70 to-gray-800/60"></div>
             </div>
           ))}
           

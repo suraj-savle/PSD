@@ -195,90 +195,6 @@ export default function Register() {
             Complete all sections to apply for the Prime Minister's Special Scholarship Scheme
           </p>
 
-<<<<<<< HEAD
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">I am a</label>
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-              >
-                <option>Student</option>
-                <option>SAG</option>
-                <option>Finance</option>
-              </select>
-            </div> */}
-
-            {/* Full Name */}
-            <div>
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                required
-              />
-            </div>
-
-            {/* Phone */}
-            <div>
-              <input
-                type="number"
-                name="phone"
-                placeholder="+91 Phone Number"
-                maxLength={10}
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                required
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                required
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                required
-              />
-            </div>
-
-            {/* OTP */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Verification Code</label>
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  name="otp"
-                  placeholder="Enter OTP"
-                  value={formData.otp}
-                  onChange={handleChange}
-                  className="flex-1 border outline-0 border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                  required
-                />
-=======
           <form onSubmit={handleSubmit}>
             {/* ================= User Details ================= */}
             {currentSection === 0 && (
@@ -709,7 +625,6 @@ export default function Register() {
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-10">
               {currentSection > 0 ? (
->>>>>>> 2a8c5b016af0cba16e5c6f544b180891a28e7642
                 <button
                   type="button"
                   onClick={handlePrev}

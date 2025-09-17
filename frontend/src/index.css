@@ -7,4 +7,25 @@
   --text-dark: #1f2937;       /* gray-800 */
   --text-light: #6b7280;      /* gray-500 */
   --bg-light: #f9fafb;        /* gray-50 */
+
+   --pmss1-primary: #1A73E8;   /* Google Blue */
+  --pmss1-secondary: #2E2E2E; /* Charcoal Black */
+  --pmss1-background: #FFFFFF;/* White */
+  --pmss1-accent: #F5F7FA;    /* Light Grey */
+  --pmss1-highlight: #34A853; /* Green */
+
+  /* 🎨 Palette 2: Classic & Elegant */
+  --pmss2-primary: #0047AB;   /* Royal Blue */
+  --pmss2-secondary: #FFD700; /* Golden Yellow */
+  --pmss2-background: #FAFAFA;/* Off-White */
+  --pmss2-text: #1F2937;      /* Dark Slate */
+  --pmss2-accent: #D1D5DB;    /* Light Grey */
+
+   --pmss-primary: #6D28D9;   /* Purple */
+  --pmss-secondary: #F97316; /* Orange */
+  --pmss-background: #FFFFFF;
+  --pmss-text: #1E293B;
+  --pmss-accent: #F3F4F6;
 }
+
+   

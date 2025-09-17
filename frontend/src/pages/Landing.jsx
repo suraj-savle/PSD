@@ -1,466 +1,554 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import HeroBg from "../assets/Hero.jpg";
 
-export default function Landing() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [language, setLanguage] = useState('english');
+const Landing = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-
-  // Background slides data
-  const slides = [
-    {
-      image: "url('/images/pm-scholarship-bg.jpeg')",
-      title: {
-        english: "Empowering Education Through PMSSS Scholarships",
-        marathi: "पीएमएसएसएस शिष्यवृत्ती द्वारे शिक्षण सक्षम करणे"
-      },
-      description: {
-        english: "Apply for the Prime Minister's Special Scholarship Scheme online. Track applications, upload documents, and get real-time updates — all on one secure platform.",
-        marathi: "पंतप्रधान विशेष शिष्यवृत्ती योजनेसाठी ऑनलाइन अर्ज करा. अर्ज ट्रॅक करा, दस्तऐवज अपलोड करा आणि रिअल-टाइम अपडेट्स मिळवा — सर्व एका सुरक्षित प्लॅटफॉर्मवर."
-      }
-    },
-    {
-      image: "url('/images/education-bg.jpeg')",
-      title: {
-        english: "Supporting Dreams of Higher Education",
-        marathi: "उच्च शिक्षणाचे स्वप्नांना पाठिंबा"
-      },
-      description: {
-        english: "Financial assistance for talented students to pursue education in premier institutions across India.",
-        marathi: "भारतातील प्रमुख संस्थांमध्ये शिक्षण घेण्यासाठी प्रतिभावान विद्यार्थ्यांसाठी आर्थिक सहाय्य."
-      }
-    },
-    {
-      image: "url('/images/students-bg.jpeg')",
-      title: {
-        english: "Transparent & Efficient Scholarship Process",
-        marathi: "पारदर्शक आणि कार्यक्षम शिष्यवृत्ती प्रक्रिया"
-      },
-      description: {
-        english: "Our streamlined process ensures fair and timely distribution of scholarships to eligible candidates.",
-        marathi: "आमची सुव्यवस्थित प्रक्रिया पात्र उमेदवारांना शिष्यवृत्तीची वेळेवर आणि न्याय्य वितरण सुनिश्चित करते."
-      }
-    }
-  ];
-
-  // Auto-rotate slides
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  // FAQ data
-  const faqs = [
-    {
-      question: {
-        english: "Who is eligible for PMSSS scholarships?",
-        marathi: "पीएमएसएसएस शिष्यवृत्तीसाठी कोण पात्र आहे?"
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in-view');
+          }
+        });
       },
-      answer: {
-        english: "Students from specific regions who have passed their 12th standard with minimum required marks and have secured admission in recognized institutions.",
-        marathi: "विशिष्ट प्रदेशातील विद्यार्थी ज्यांनी आपली 12वी मानक किमान आवश्यक गुणांसह उत्तीर्ण केली आहे आणि मान्यताप्राप्त संस्थांमध्ये प्रवेश सुरक्षित केला आहे."
-      }
-    },
-    {
-      question: {
-        english: "What documents are required for application?",
-        marathi: "अर्जासाठी कोणते दस्तऐवज आवश्यक आहेत?"
-      },
-      answer: {
-        english: "Typically, you need educational certificates, income proof, identity proof, bank details, and admission proof.",
-        marathi: "सामान्यत:, आपल्याला शैक्षणिक प्रमाणपत्रे, उत्पन्न दाखला, ओळखपत्र, बँक तपशील आणि प्रवेश दाखला आवश्यक आहे."
-      }
-    },
-    {
-      question: {
-        english: "How long does the application process take?",
-        marathi: "अर्ज प्रक्रियेस किती वेळ लागतो?"
-      },
-      answer: {
-        english: "The application review typically takes 2-3 weeks after all documents are submitted correctly.",
-        marathi: "सर्व दस्तऐवज योग्यरित्या सादर केल्यानंतर अर्ज पुनरावलोकनास सामान्यत: 2-3 आठवडे लागतात."
-      }
-    },
-    {
-      question: {
-        english: "Can I edit my application after submission?",
-        marathi: "सबमिशन नंतर मी माझा अर्ज संपादित करू शकतो का?"
-      },
-      answer: {
-        english: "Yes, you can edit your application within 7 days of submission or until it's under review, whichever comes first.",
-        marathi: "होय, सबमिशनच्या 7 दिवसांच्या आत किंवा तो पुनरावलोकनाधीन असताना आपण आपला अर्ज संपादित करू शकता, यापैकी जे आधी असेल."
-      }
-    }
-  ];
-
-  // Content based on selected language
-  const content = {
-    nav: {
-      features: {
-        english: "Features",
-        marathi: "वैशिष्ट्ये"
-      },
-      about: {
-        english: "About",
-        marathi: "विषयी"
-      },
-      faq: {
-        english: "FAQ",
-        marathi: "सामान्य प्रश्न"
-      },
-      contact: {
-        english: "Contact",
-        marathi: "संपर्क"
-      },
-      login: {
-        english: "Login",
-        marathi: "लॉगिन"
-      },
-      register: {
-        english: "Register",
-        marathi: "नोंदणी करा"
-      }
-    },
-    hero: {
-      apply: {
-        english: "Apply Now",
-        marathi: "आता अर्ज करा"
-      },
-      learn: {
-        english: "Learn More",
-        marathi: "अधिक जाणून घ्या"
-      }
-    },
-    features: {
-      title: {
-        english: "Key Features",
-        marathi: "मुख्य वैशिष्ट्ये"
-      }
-    },
-    about: {
-      title: {
-        english: "About PMSSS",
-        marathi: "पीएमएसएसएस विषयी"
-      },
-      description: {
-        english: "The Prime Minister's Special Scholarship Scheme (PMSSS) is an initiative to support higher education for deserving students. This portal ensures transparency, efficiency, and accessibility in the scholarship process.",
-        marathi: "पंतप्रधान विशेष शिष्यवृत्ती योजना (पीएमएसएसएस) ही पात्र विद्यार्थ्यांसाठी उच्च शिक्षणाला पाठिंबा देण्याची एक उपक्रम आहे. हे पोर्टल शिष्यवृत्ती प्रक्रियेमध्ये पारदर्शकता, कार्यक्षमता आणि प्रवेशयोग्यता सुनिश्चित करते."
-      }
-    },
-    faqSection: {
-      title: {
-        english: "Frequently Asked Questions",
-        marathi: "वारंवार विचारले जाणारे प्रश्न"
-      }
-    },
-    contact: {
-      title: {
-        english: "Contact Us",
-        marathi: "आमच्याशी संपर्क साधा"
-      },
-      description: {
-        english: "Have questions? Reach out to our support team.",
-        marathi: "प्रश्न आहेत? आमच्या समर्थन संघाशी संपर्क साधा."
-      },
-      button: {
-        english: "Email Support",
-        marathi: "ईमेल समर्थन"
-      }
-    },
-    footer: {
-      text: {
-        english: "© 2025 PMSSS Portal. All rights reserved.",
-        marathi: "© 2025 पीएमएसएसएस पोर्टल. सर्व हक्क राखीव."
-      }
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Navbar */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
-              <span className="text-2xl font-bold text-blue-700">
-                PMSSS Portal
-              </span>
-            </div>
-            
-            <nav className="hidden md:flex space-x-6 items-center">
-              <a href="#features" className="text-gray-600 hover:text-blue-700 transition-colors">
-                {content.nav.features[language]}
-              </a>
-              <a href="#about" className="text-gray-600 hover:text-blue-700 transition-colors">
-                {content.nav.about[language]}
-              </a>
-              <a href="#faq" className="text-gray-600 hover:text-blue-700 transition-colors">
-                {content.nav.faq[language]}
-              </a>
-              <a href="#contact" className="text-gray-600 hover:text-blue-700 transition-colors">
-                {content.nav.contact[language]}
-              </a>
-              
-              {/* Language Toggle */}
-              <div className="flex items-center ml-4">
-                <button 
-                  onClick={() => setLanguage('english')}
-                  className={`px-2 py-1 rounded-l-md ${language === 'english' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                >
-                  EN
-                </button>
-                <button 
-                  onClick={() => setLanguage('marathi')}
-                  className={`px-2 py-1 rounded-r-md ${language === 'marathi' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                >
-                  MR
-                </button>
-              </div>
-            </nav>
-            
-            <div className="flex space-x-4 items-center">
-              <a
-                href="/login"
-                className="px-4 py-2 border border-blue-600 rounded-md transition-colors text-blue-600 hover:bg-blue-600 hover:text-white"
-              >
-                {content.nav.login[language]}
-              </a>
-              <a
-                href="/register"
-                className="px-4 py-2 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700"
-              >
-                {content.nav.register[language]}
-              </a>
-              
-              {/* Mobile menu button */}
-              <div className="md:hidden ml-2">
-                <button className="text-gray-600 hover:text-blue-700 focus:outline-none">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
+      { threshold: 0.1 }
+    );
+    
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+    
+    return () => observer.disconnect();
+  }, [isLoading]);
+  
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-indigo-600 flex items-center justify-center z-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-white">PMSSS</h2>
         </div>
-      </header>
-
-      {/* Hero Section with Auto-sliding Background */}
-      <main className="flex-grow">
-        <section className="py-20 relative bg-cover bg-center h-[600px] overflow-hidden">
-          {/* Slides */}
-          {slides.map((slide, index) => (
-            <div 
-              key={index}
-              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{ backgroundImage: slide.image }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-900/70 to-gray-800/60"></div>
-            </div>
-          ))}
+      </div>
+    );
+  }
+  
+  return (
+    <div className={`w-full animate-fade-in ${isDarkMode ? 'bg-black text-white' : 'bg-white text-gray-900'}`}>
+      {/* Hero Section */}
+      <div className="relative h-screen">
+      {/* Navbar */}
+      <nav className="absolute top-0 left-0 w-full bg-transparent z-20 px-4 py-4 animate-slide-down">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Logo */}
+          <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            PMSSS
+          </div>
           
-          {/* Slide indicators */}
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`h-3 w-3 rounded-full transition-colors ${
-                  index === currentSlide ? 'bg-white' : 'bg-white/50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white h-full flex flex-col justify-center">
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in">
-              {slides[currentSlide].title[language]}
-            </h1>
-            <p className="mt-4 text-lg max-w-3xl mx-auto text-blue-100 animate-fade-in-delay">
-              {slides[currentSlide].description[language]}
-            </p>
-            <div className="mt-8 flex justify-center gap-4 animate-fade-in-delay-2">
-              <a
-                href="/register"
-                className="px-6 py-3 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700 shadow-md"
-              >
-                {content.hero.apply[language]}
-              </a>
-              <a
-                href="#about"
-                className="px-6 py-3 rounded-md border border-white transition-colors text-white hover:bg-white/10"
-              >
-                {content.hero.learn[language]}
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" className="py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-              {content.features.title[language]}
-            </h2>
-            <div className="grid gap-10 md:grid-cols-3">
-              {[
-                {
-                  title: {
-                    english: "Digital Application",
-                    marathi: "डिजिटल अर्ज"
-                  },
-                  desc: {
-                    english: "Apply online without paperwork, saving time and effort.",
-                    marathi: "कागदपत्रे न करता ऑनलाइन अर्ज करा, वेळ आणि श्रम वाचवा."
-                  },
-                  icon: (
-                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  )
-                },
-                {
-                  title: {
-                    english: "Document Upload",
-                    marathi: "दस्तऐवज अपलोड"
-                  },
-                  desc: {
-                    english: "Securely upload and verify required documents online.",
-                    marathi: "ऑनलाइन आवश्यक दस्तऐवज सुरक्षितपणे अपलोड करा आणि सत्यापित करा."
-                  },
-                  icon: (
-                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                    </svg>
-                  )
-                },
-                {
-                  title: {
-                    english: "Real-time Tracking",
-                    marathi: "रिअल-टाइम ट्रॅकिंग"
-                  },
-                  desc: {
-                    english: "Track your scholarship application at every stage.",
-                    marathi: "प्रत्येक टप्प्यावर आपला शिष्यवृत्ती अर्ज ट्रॅक करा."
-                  },
-                  icon: (
-                    <svg className="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  )
-                },
-              ].map((f, i) => (
-                <div
-                  key={i}
-                  className="p-6 rounded-lg shadow-lg bg-white text-center transition-transform hover:scale-105 hover:shadow-xl"
-                >
-                  {f.icon}
-                  <h3 className="text-xl font-semibold mb-2 text-blue-700">
-                    {f.title[language]}
-                  </h3>
-                  <p className="text-gray-600">{f.desc[language]}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section id="about" className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">
-              {content.about.title[language]}
-            </h2>
-            <p className="max-w-3xl mx-auto text-lg text-gray-600">
-              {content.about.description[language]}
-            </p>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section id="faq" className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-              {content.faqSection.title[language]}
-            </h2>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div key={index} className="border rounded-lg overflow-hidden">
-                  <button
-                    className="flex justify-between items-center w-full p-4 text-left font-medium text-blue-800 bg-blue-50 hover:bg-blue-100 transition-colors"
-                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  >
-                    <span>{faq.question[language]}</span>
-                    <svg 
-                      className={`w-5 h-5 transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === index ? 'max-h-96' : 'max-h-0'}`}>
-                    <div className="p-4 text-gray-600 bg-white">
-                      {faq.answer[language]}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">
-              {content.contact.title[language]}
-            </h2>
-            <p className="mb-8 text-gray-600">
-              {content.contact.description[language]}
-            </p>
-            <a
-              href="mailto:support@pmsss.gov"
-              className="px-6 py-3 rounded-md text-white transition-colors bg-blue-600 hover:bg-blue-700 inline-block"
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-8 items-center">
+            <a href="#about" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
+              About
+            </a>
+            <a href="#features" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
+              Features
+            </a>
+            <a href="#contact" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
+              Contact
+            </a>
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="ml-4 p-2 rounded-md bg-transparent hover:bg-gray-600 hover:bg-opacity-20 transition-colors"
             >
-              {content.contact.button[language]}
+              {isDarkMode ? (
+                <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              )}
+            </button>
+          </div>
+          
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex space-x-4">
+            <a
+              href="/login"
+              className={`px-4 py-2 border rounded-md transition-colors ${
+                isDarkMode 
+                  ? 'border-white text-white hover:bg-white hover:text-gray-900' 
+                  : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'
+              }`}
+            >
+              Login
+            </a>
+            <a
+              href="/register"
+              className="px-4 py-2 bg-indigo-500 text-white hover:bg-white hover:text-indigo-500 rounded-md transition-colors"
+            >
+              Register
             </a>
           </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white shadow-md py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-gray-600">
-            {content.footer.text[language]}
-          </p>
+          
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 bg-black bg-opacity-80 rounded-lg p-4">
+            <div className="flex flex-col space-y-4">
+              <a href="#about" className="text-white hover:text-blue-300 transition-colors">
+                About
+              </a>
+              <a href="#features" className="text-white hover:text-blue-300 transition-colors">
+                Features
+              </a>
+              <a href="#contact" className="text-white hover:text-blue-300 transition-colors">
+                Contact
+              </a>
+              <div className="flex flex-col space-y-2 pt-4 border-t border-gray-600">
+                <a
+                  href="/login"
+                  className="px-4 py-2 border border-white text-white hover:bg-white hover:text-gray-900 rounded-md transition-colors text-center"
+                >
+                  Login
+                </a>
+                <a
+                  href="/register"
+                  className="px-4 py-2 bg-indigo-500 text-white hover:bg-white hover:text-indigo-500 rounded-md transition-colors text-center"
+                >
+                  Register
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+      
+      {/* Hero Background */}
+      {isDarkMode && (
+        <img
+          src={HeroBg}
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover opacity-50"
+        />
+      )}
+      
+      {/* Hero Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center animate-fade-in-up">
+        <div className="text-lg md:text-xl text-indigo-300 mb-4 animate-float">
+          Paperless. Transparent. Accessible.
+        </div>
+        <h1
+          className={`text-4xl md:text-6xl font-bold mb-4 ${
+            isMobile ? "text-2xl" : ""
+          }`}
+        >
+         Prime Minister’s Special Scholarship Scheme (PMSSS)
+        </h1>
+        <p
+          className={`text-lg md:text-2xl mb-8 max-w-2xl ${
+            isMobile ? "text-base" : ""
+          }`}
+        >
+          A digital platform ensuring transparency, efficiency, and accessibility in scholarship distribution.
+        </p>
+        <a
+          href="/register"
+          className="bg-indigo-500 hover:bg-white hover:text-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+        >
+          Apply for Scholarship
+        </a>
+      </div>
+      
+      </div>
+      
+      {/* Features Section */}
+      <section id="features" className={`py-16 ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className={`text-2xl md:text-3xl font-bold text-center mb-12 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Key Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {[
+              { title: "Paperless Application", desc: "Simple. Digital. Eco-friendly." },
+              { title: "Transparent Process", desc: "Clear. Open. Fair." },
+              { title: "Automated Verification", desc: "Smart. Accurate. Reliable." },
+              { title: "Direct Benefit Transfer (DBT)", desc: "Secure. Direct. Hassle-free." },
+              { title: "Accessibility for All", desc: "Anytime. Anywhere. Inclusive." },
+              { title: "Dedicated Support", desc: "Guided. Helpful. Supportive." }
+            ].map((feature, index) => (
+              <div key={index} className={`p-6 rounded-lg shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-600' : 'bg-white border border-gray-200'}`} style={{animationDelay: `${index * 0.1}s`}}>
+                <h3 className="text-lg font-semibold text-indigo-400 mb-2">{feature.title}</h3>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* About Section */}
+      <section id="about" className={`py-24 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-6 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>About PMSSS</h2>
+            <div className={`w-24 h-1 mx-auto mb-8 animate-on-scroll ${isDarkMode ? 'bg-indigo-400' : 'bg-indigo-600'}`}></div>
+            <p className={`text-xl max-w-4xl mx-auto leading-relaxed mb-12 animate-on-scroll ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              The Prime Minister's Special Scholarship Scheme (PMSSS) is a flagship initiative designed to support higher education for deserving students from Jammu & Kashmir and Ladakh.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="animate-on-scroll">
+              <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Our Mission</h3>
+              <p className={`text-lg leading-relaxed mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                To provide transparent, efficient, and accessible scholarship opportunities that empower students to pursue their academic dreams without financial barriers. We believe in creating equal opportunities for all deserving students.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Supporting over 10,000+ students annually</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>100% digital and paperless process</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Direct benefit transfer to student accounts</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className={`p-8 rounded-2xl animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+              <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Key Benefits</h3>
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Educational Excellence</h4>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Supporting academic pursuits in premier institutions</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Community Impact</h4>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Building stronger communities through education</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Future Ready</h4>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Preparing students for tomorrow's challenges</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* FAQ Section */}
+      <section id="faq" className={`py-24 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-6 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Frequently Asked Questions about PMSSS Scholarships</h2>
+            <div className={`w-24 h-1 mx-auto mb-8 animate-on-scroll ${isDarkMode ? 'bg-indigo-400' : 'bg-indigo-600'}`}></div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className={`rounded-2xl overflow-hidden animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-white border border-gray-200 shadow-lg'}`}>
+              <button
+                className={`flex justify-between items-center w-full p-6 text-left font-medium transition-colors ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-50'}`}
+                onClick={() => setOpenFaq(openFaq === 0 ? null : 0)}
+              >
+                <span className="text-lg">Who is eligible for PMSSS scholarships?</span>
+                <svg 
+                  className={`w-6 h-6 transition-transform duration-300 ${openFaq === 0 ? 'rotate-180' : ''} ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === 0 ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`p-6 pt-0 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className="text-base leading-relaxed">Students from specific regions who have passed their 12th standard with the minimum required marks and have secured admission to recognized institutions.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className={`rounded-2xl overflow-hidden animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-white border border-gray-200 shadow-lg'}`}>
+              <button
+                className={`flex justify-between items-center w-full p-6 text-left font-medium transition-colors ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-50'}`}
+                onClick={() => setOpenFaq(openFaq === 1 ? null : 1)}
+              >
+                <span className="text-lg">What documents are required for the application?</span>
+                <svg 
+                  className={`w-6 h-6 transition-transform duration-300 ${openFaq === 1 ? 'rotate-180' : ''} ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === 1 ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`p-6 pt-0 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className="text-base leading-relaxed">Typically, you need educational certificates, proof of income, proof of identity, bank details, and proof of admission.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className={`rounded-2xl overflow-hidden animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-white border border-gray-200 shadow-lg'}`}>
+              <button
+                className={`flex justify-between items-center w-full p-6 text-left font-medium transition-colors ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-50'}`}
+                onClick={() => setOpenFaq(openFaq === 2 ? null : 2)}
+              >
+                <span className="text-lg">How long does the application process take?</span>
+                <svg 
+                  className={`w-6 h-6 transition-transform duration-300 ${openFaq === 2 ? 'rotate-180' : ''} ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === 2 ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`p-6 pt-0 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className="text-base leading-relaxed">The application review typically takes 2-3 weeks after all documents are submitted correctly.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className={`rounded-2xl overflow-hidden animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-white border border-gray-200 shadow-lg'}`}>
+              <button
+                className={`flex justify-between items-center w-full p-6 text-left font-medium transition-colors ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-50'}`}
+                onClick={() => setOpenFaq(openFaq === 3 ? null : 3)}
+              >
+                <span className="text-lg">Can I edit my application after submission?</span>
+                <svg 
+                  className={`w-6 h-6 transition-transform duration-300 ${openFaq === 3 ? 'rotate-180' : ''} ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === 3 ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`p-6 pt-0 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className="text-base leading-relaxed">Yes, you can edit your application within 7 days of submission or until it's under review, whichever comes first.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Contact Section */}
+      <section id="contact" className={`py-24 ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-6 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Get In Touch</h2>
+            <div className={`w-24 h-1 mx-auto mb-8 animate-on-scroll ${isDarkMode ? 'bg-indigo-400' : 'bg-indigo-600'}`}></div>
+            <p className={`text-xl mb-12 max-w-3xl mx-auto animate-on-scroll ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Have questions about the PMSSS application process? Our dedicated support team is here to guide you through every step of your scholarship journey.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Cards */}
+            <div className="space-y-6">
+              <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gray-900 border border-gray-700 hover:border-indigo-500' : 'bg-white border border-gray-200 hover:border-indigo-300 shadow-lg hover:shadow-xl'}`} style={{animationDelay: '0.1s'}}>
+                <div className="flex items-start space-x-4">
+                  <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Email Support</h3>
+                    <p className={`mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Get detailed assistance via email</p>
+                    <a href="mailto:support@pmsss.gov.in" className={`font-medium hover:underline ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>support@pmsss.gov.in</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gray-900 border border-gray-700 hover:border-indigo-500' : 'bg-white border border-gray-200 hover:border-indigo-300 shadow-lg hover:shadow-xl'}`} style={{animationDelay: '0.2s'}}>
+                <div className="flex items-start space-x-4">
+                  <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Phone Support</h3>
+                    <p className={`mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Speak directly with our support team</p>
+                    <a href="tel:1800-XXX-XXXX" className={`font-medium hover:underline ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>1800-XXX-XXXX</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div className={`p-6 rounded-2xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gray-900 border border-gray-700 hover:border-indigo-500' : 'bg-white border border-gray-200 hover:border-indigo-300 shadow-lg hover:shadow-xl'}`} style={{animationDelay: '0.3s'}}>
+                <div className="flex items-start space-x-4">
+                  <div className="w-14 h-14 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Support Hours</h3>
+                    <p className={`mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>We're here when you need us</p>
+                    <p className={`font-medium ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>Saturday: 10:00 AM - 2:00 PM</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Help Section */}
+            <div className={`p-8 rounded-2xl animate-on-scroll ${isDarkMode ? 'bg-gray-900 border border-gray-700' : 'bg-white border border-gray-200 shadow-lg'}`} style={{animationDelay: '0.4s'}}>
+              <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Quick Help</h3>
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-black border border-gray-600' : 'bg-gray-50 border border-gray-100'}`}>
+                  <h4 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Application Status</h4>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Track your scholarship application progress in real-time</p>
+                </div>
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-black border border-gray-600' : 'bg-gray-50 border border-gray-100'}`}>
+                  <h4 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Document Upload</h4>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Get help with uploading and verifying your documents</p>
+                </div>
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-black border border-gray-600' : 'bg-gray-50 border border-gray-100'}`}>
+                  <h4 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Eligibility Criteria</h4>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Understand the requirements and eligibility for PMSSS</p>
+                </div>
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-black border border-gray-600' : 'bg-gray-50 border border-gray-100'}`}>
+                  <h4 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Payment Issues</h4>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Resolve any payment or disbursement related queries</p>
+                </div>
+              </div>
+              
+              <div className="mt-8 pt-6 border-t border-gray-600">
+                <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Need immediate assistance?</p>
+                <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                  Start Live Chat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Footer Section */}
+      <footer className={`py-8 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              © 2025 Prime Minister's Special Scholarship Scheme (PMSSS). All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
-
-      {/* Custom styles for animations */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 1s ease-out forwards;
-        }
-        .animate-fade-in-delay {
-          animation: fade-in 1s ease-out 0.3s forwards;
-          opacity: 0;
-        }
-        .animate-fade-in-delay-2 {
-          animation: fade-in 1s ease-out 0.6s forwards;
-          opacity: 0;
-        }
-      `}</style>
     </div>
   );
+};
+
+export default Landing;
+
+// Add CSS animations
+const styles = `
+  html {
+    scroll-behavior: smooth;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-down {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fade-in-up {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes slide-up {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out;
+  }
+  .animate-slide-down {
+    animation: slide-down 0.6s ease-out 0.2s both;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out 0.4s both;
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+  }
+  .animate-in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = styles;
+  document.head.appendChild(styleSheet);
 }

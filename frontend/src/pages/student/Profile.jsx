@@ -32,8 +32,7 @@ export default function StudentProfile() {
   const [isUpdating, setIsUpdating] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODExNDkxNCwiZXhwIjoxNzU4MTE4NTE0fQ.fB79hY_VCOEIqiXtIuBzNKZEEIB5AvbDQ3a_NX-kk6E";
-
+  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEyMzYyNSwiZXhwIjoxNzU4MTI3MjI1fQ.3eYWrbaNdyLSHKWCk4a3n4VnFLSK_YDnYv3rj71Rvjg";
   useEffect(() => {
     const fetchStudent = async () => {
       if (!token) {

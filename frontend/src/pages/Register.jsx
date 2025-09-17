@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import DatePicker from '../components/DatePicker';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -21,11 +22,12 @@ export default function Register() {
 
     // Parent Details
     fatherName: "",
-    fatherAadhar: "",
-    fatherDivorce: false,
+    fatherOccupation: "",
+    fatherIncome: "",
     motherName: "",
-    motherAadhar: "",
-    motherWidowDivorce: false,
+    motherOccupation: "",
+    motherIncome: "",
+    guardianRelation: "",
     mobile: "",
     parentsAddress: "",
 
@@ -49,11 +51,13 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [currentSection, setCurrentSection] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const sections = [
     "User Details",
     "Personal Details",
+    "Parents/Guardian Details",
     "Academic Details",
     "Bank Details"
   ];
@@ -79,10 +83,16 @@ export default function Register() {
     
     if (currentSection === 0) {
       if (!formData.username) newErrors.username = "Username is required";
+      else if (formData.username.length < 3) newErrors.username = "Username must be at least 3 characters";
+      else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) newErrors.username = "Username can only contain letters, numbers, and underscores";
+      
       if (!formData.email) newErrors.email = "Email is required";
-      else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Please provide a valid email address";
+      
       if (!formData.password) newErrors.password = "Password is required";
-      else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+      else if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters";
+      else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+      
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
     }
     
@@ -97,20 +107,23 @@ export default function Register() {
     }
     
     if (currentSection === 2) {
+      if (!formData.fatherName) newErrors.fatherName = "Father's name is required";
+      if (!formData.fatherOccupation) newErrors.fatherOccupation = "Father's occupation is required";
+      if (!formData.fatherIncome) newErrors.fatherIncome = "Father's income is required";
+      if (!formData.motherName) newErrors.motherName = "Mother's name is required";
+      if (!formData.motherOccupation) newErrors.motherOccupation = "Mother's occupation is required";
+      if (!formData.mobile) newErrors.mobile = "Mobile number is required";
+      else if (!/^[6-9]\d{9}$/.test(formData.mobile)) newErrors.mobile = "Mobile must be a valid 10-digit number starting with 6-9";
+      if (!formData.parentsAddress) newErrors.parentsAddress = "Address is required";
+    }
+    
+    if (currentSection === 3) {
       if (!formData.course) newErrors.course = "Course is required";
       if (!formData.institution) newErrors.institution = "Institution is required";
       if (!formData.yearOfStudy) newErrors.yearOfStudy = "Year of study is required";
       if (!formData.previousMarks) newErrors.previousMarks = "Previous marks are required";
       if (!formData.category) newErrors.category = "Category is required";
       if (!formData.annualIncome) newErrors.annualIncome = "Annual income is required";
-    }
-    
-    if (currentSection === 3) {
-      if (!formData.fatherName) newErrors.fatherName = "Father's name is required";
-      if (!formData.motherName) newErrors.motherName = "Mother's name is required";
-      if (!formData.mobile) newErrors.mobile = "Mobile number is required";
-      else if (!/^\d{10}$/.test(formData.mobile)) newErrors.mobile = "Mobile must be 10 digits";
-      if (!formData.parentsAddress) newErrors.parentsAddress = "Address is required";
     }
     
     if (currentSection === 4) {
@@ -145,12 +158,18 @@ export default function Register() {
     e.preventDefault();
     if (validateSection()) {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        // Prepare form data with proper date format
+        const submitData = {
+          ...formData,
+          dob: formData.dob ? new Date(formData.dob).toISOString() : ''
+        };
+        
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(submitData),
         });
         
         if (response.ok) {
@@ -158,7 +177,7 @@ export default function Register() {
           localStorage.setItem('token', data.token);
           toast.success('Registration successful! Redirecting to dashboard...');
           setTimeout(() => {
-            navigate('/student/dashboard');
+            navigate('/student');
           }, 2000);
         } else {
           const errorData = await response.json();
@@ -291,22 +310,40 @@ export default function Register() {
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                   </div>
                   <div>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.password ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        className={`w-full border rounded-lg px-4 py-3 pr-12 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                          errors.password ? "border-red-500" : "border-gray-300"
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      >
+                        {showPassword ? (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                   </div>
                   <div>
                     <input
-                      type="password"
+                      type="text"
                       name="confirmPassword"
                       placeholder="Confirm Password"
                       value={formData.confirmPassword}
@@ -324,7 +361,7 @@ export default function Register() {
                     <svg className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
-                    Your password must be at least 6 characters long. Keep it secure as it will be used to access your scholarship portal.
+                    Password Requirements: Minimum 8 characters with at least 1 uppercase letter, 1 lowercase letter, and 1 number. Username must be 3+ characters with only letters, numbers, and underscores.
                   </p>
                 </div>
               </section>
@@ -414,23 +451,20 @@ export default function Register() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                    <input
-                      type="date"
-                      name="dob"
+                    <DatePicker
                       value={formData.dob}
                       onChange={handleChange}
-                      required
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.dob ? "border-red-500" : "border-gray-300"
-                      }`}
+                      placeholder="Select your date of birth"
+                      error={errors.dob}
                     />
                     {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
                   </div>
                   <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Aadhar Card Number</label>
                     <input
                       type="text"
                       name="aadhar"
-                      placeholder="Aadhar Card Number (आधार कार्ड)"
+                      placeholder="Enter 12-digit Aadhar number"
                       value={formData.aadhar}
                       onChange={handleChange}
                       required
@@ -445,8 +479,156 @@ export default function Register() {
               </section>
             )}
 
-            {/* ================= Academic Details ================= */}
+            {/* ================= Parent Details ================= */}
             {currentSection === 2 && (
+              <section className="space-y-4">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-4">
+                  Parents/Guardian Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="fatherName"
+                      placeholder="Father's Full Name"
+                      value={formData.fatherName}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.fatherName ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.fatherName && <p className="text-red-500 text-sm mt-1">{errors.fatherName}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="fatherOccupation"
+                      placeholder="Father's Occupation"
+                      value={formData.fatherOccupation}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.fatherOccupation ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.fatherOccupation && <p className="text-red-500 text-sm mt-1">{errors.fatherOccupation}</p>}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="motherName"
+                      placeholder="Mother's Full Name"
+                      value={formData.motherName}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.motherName ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.motherName && <p className="text-red-500 text-sm mt-1">{errors.motherName}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="motherOccupation"
+                      placeholder="Mother's Occupation"
+                      value={formData.motherOccupation}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.motherOccupation ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.motherOccupation && <p className="text-red-500 text-sm mt-1">{errors.motherOccupation}</p>}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="fatherIncome"
+                      placeholder="Father's Annual Income (₹)"
+                      value={formData.fatherIncome}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.fatherIncome ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.fatherIncome && <p className="text-red-500 text-sm mt-1">{errors.fatherIncome}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="motherIncome"
+                      placeholder="Mother's Annual Income (₹)"
+                      value={formData.motherIncome}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <select
+                      name="guardianRelation"
+                      value={formData.guardianRelation}
+                      onChange={handleChange}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    >
+                      <option value="">Guardian Relationship (if applicable)</option>
+                      <option value="father">Father</option>
+                      <option value="mother">Mother</option>
+                      <option value="uncle">Uncle</option>
+                      <option value="aunt">Aunt</option>
+                      <option value="grandfather">Grandfather</option>
+                      <option value="grandmother">Grandmother</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="mobile"
+                      placeholder="Contact Mobile Number"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      required
+                      maxLength="10"
+                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                        errors.mobile ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
+                  </div>
+                </div>
+                
+                <div>
+                  <textarea
+                    name="parentsAddress"
+                    placeholder="Complete Home Address"
+                    value={formData.parentsAddress}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                      errors.parentsAddress ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.parentsAddress && <p className="text-red-500 text-sm mt-1">{errors.parentsAddress}</p>}
+                </div>
+              </section>
+            )}
+
+            {/* ================= Academic Details ================= */}
+            {currentSection === 3 && (
               <section className="space-y-4">
                 <h3 className="text-xl font-semibold text-indigo-700 mb-4">
                   Academic Information
@@ -549,130 +731,6 @@ export default function Register() {
                     }`}
                   />
                   {errors.annualIncome && <p className="text-red-500 text-sm mt-1">{errors.annualIncome}</p>}
-                </div>
-              </section>
-            )}
-
-            {/* ================= Parent Details ================= */}
-            {currentSection === 3 && (
-              <section className="space-y-4">
-                <h3 className="text-xl font-semibold text-indigo-700 mb-4">
-                  Parents/Guardian Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="fatherName"
-                      placeholder="Father/Guardian Full Name (वडील/गॉर्डीअन पूर्ण नाव)"
-                      value={formData.fatherName}
-                      onChange={handleChange}
-                      required
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.fatherName ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    {errors.fatherName && <p className="text-red-500 text-sm mt-1">{errors.fatherName}</p>}
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="fatherAadhar"
-                      placeholder="Father Aadhar Card (वडिलांचे आधार कार्ड)"
-                      value={formData.fatherAadhar}
-                      onChange={handleChange}
-                      maxLength="12"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="fatherDivorce"
-                    id="fatherDivorce"
-                    checked={formData.fatherDivorce}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="fatherDivorce" className="ml-2 block text-sm text-gray-700">
-                    Divorce (घटस्फोट)
-                  </label>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="motherName"
-                      placeholder="Mother Full Name (आईचे पूर्ण नाव)"
-                      value={formData.motherName}
-                      onChange={handleChange}
-                      required
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.motherName ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    {errors.motherName && <p className="text-red-500 text-sm mt-1">{errors.motherName}</p>}
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="motherAadhar"
-                      placeholder="Mother Aadhar Card (आईचे आधार कार्ड)"
-                      value={formData.motherAadhar}
-                      onChange={handleChange}
-                      maxLength="12"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="motherWidowDivorce"
-                    id="motherWidowDivorce"
-                    checked={formData.motherWidowDivorce}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="motherWidowDivorce" className="ml-2 block text-sm text-gray-700">
-                    Widow/Divorce (विधवा/घटस्फोट)
-                  </label>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="mobile"
-                      placeholder="Mobile Number (मोबाईल क्रमांक)"
-                      value={formData.mobile}
-                      onChange={handleChange}
-                      required
-                      maxLength="10"
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.mobile ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
-                  </div>
-                  <div>
-                    <textarea
-                      name="parentsAddress"
-                      placeholder="Parents Address (पालकांचा पत्ता)"
-                      value={formData.parentsAddress}
-                      onChange={handleChange}
-                      required
-                      rows="3"
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.parentsAddress ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    {errors.parentsAddress && <p className="text-red-500 text-sm mt-1">{errors.parentsAddress}</p>}
-                  </div>
                 </div>
               </section>
             )}
@@ -816,7 +874,7 @@ export default function Register() {
                   type="submit"
                   className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-xl"
                 >
-                  🎓 Submit Application
+                  ✅ Complete Registration
                 </button>
               )}
             </div>

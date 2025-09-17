@@ -1,5 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Upload,
+  FileText,
+  User,
+  Calendar,
+  Building,
+  CreditCard,
+  Phone,
+  AlertCircle,
+  CheckCircle,
+  Loader,
+  X,
+  FileCheck,
+  Shield,
+  BookOpen,
+  IndianRupee,
+  Send
+} from "lucide-react";
 
 export default function ApplySchemeForm() {
   const [student, setStudent] = useState(null);
@@ -15,16 +33,17 @@ export default function ApplySchemeForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [uploadProgress, setUploadProgress] = useState({});
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODExNDkxNCwiZXhwIjoxNzU4MTE4NTE0fQ.fB79hY_VCOEIqiXtIuBzNKZEEIB5AvbDQ3a_NX-kk6E";
+  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEyMzYyNSwiZXhwIjoxNzU4MTI3MjI1fQ.3eYWrbaNdyLSHKWCk4a3n4VnFLSK_YDnYv3rj71Rvjg";
 
   useEffect(() => {
-    // Fetch logged-in student details from backend
     const fetchStudent = async () => {
       if (!token) {
         setError("Authentication required. Please login again.");
         setIsLoading(false);
+        navigate("/login");
         return;
       }
 
@@ -75,8 +94,26 @@ export default function ApplySchemeForm() {
       return;
     }
 
+    // Simulate upload progress
+    setUploadProgress(prev => ({ ...prev, [field]: 0 }));
+    const interval = setInterval(() => {
+      setUploadProgress(prev => {
+        const newProgress = (prev[field] || 0) + 10;
+        if (newProgress >= 100) {
+          clearInterval(interval);
+          return { ...prev, [field]: 100 };
+        }
+        return { ...prev, [field]: newProgress };
+      });
+    }, 100);
+
     setDocuments({ ...documents, [field]: file });
-    setError(""); // Clear previous errors
+    setError("");
+  };
+
+  const removeFile = (field) => {
+    setDocuments({ ...documents, [field]: null });
+    setUploadProgress(prev => ({ ...prev, [field]: 0 }));
   };
 
   const handleSubmit = async (e) => {
@@ -140,7 +177,7 @@ export default function ApplySchemeForm() {
       
       // Redirect after success
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate("/student/status");
       }, 2000);
     } catch (error) {
       console.error("Error submitting application:", error);
@@ -153,145 +190,245 @@ export default function ApplySchemeForm() {
   // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-IN");
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const documentIcons = {
+    aadhaar: <Shield className="h-5 w-5" />,
+    income: <IndianRupee className="h-5 w-5" />,
+    bonafide: <FileText className="h-5 w-5" />,
+    bankPassbook: <CreditCard className="h-5 w-5" />,
+    marksheet: <BookOpen className="h-5 w-5" />
+  };
+
+  const documentLabels = {
+    aadhaar: "Aadhaar Card",
+    income: "Income Certificate",
+    bonafide: "College Bonafide",
+    bankPassbook: "Bank Passbook",
+    marksheet: "Previous Year Marksheet"
   };
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-2xl p-8 flex justify-center items-center h-64">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading student details...</p>
+          <Loader className="animate-spin h-12 w-12 text-blue-600 mx-auto" />
+          <p className="mt-4 text-gray-600 font-medium">Loading your information...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-2xl p-8">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Apply for Scheme
-      </h2>
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          {error}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Apply for Scholarship Scheme</h1>
+          <p className="text-gray-600">Complete your application by providing the required information and documents</p>
         </div>
-      )}
-      
-      {success && (
-        <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-          {success}
-        </div>
-      )}
 
-      {!student ? (
-        <p className="text-gray-500">Failed to load student details. Please try again.</p>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Student Info (Read-only display) */}
-          <div className="border-b pb-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">
-              Student Details
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
-              <div>
-                <p className="font-medium">Full Name</p>
-                <p className="text-gray-600">{student.fullName || "N/A"}</p>
-              </div>
-              <div>
-                <p className="font-medium">Date of Birth</p>
-                <p className="text-gray-600">{formatDate(student.dob)}</p>
-              </div>
-              <div>
-                <p className="font-medium">Bank Name</p>
-                <p className="text-gray-600">{student.bankName || "N/A"}</p>
-              </div>
-              <div>
-                <p className="font-medium">Account Number</p>
-                <p className="text-gray-600">
-                  {student.accountNumber 
-                    ? `****${student.accountNumber.slice(-4)}` 
-                    : "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="font-medium">IFSC Code</p>
-                <p className="text-gray-600">{student.ifsc || "N/A"}</p>
-              </div>
-              <div>
-                <p className="font-medium">Mobile Number</p>
-                <p className="text-gray-600">{student.mobile || "N/A"}</p>
-              </div>
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          {/* Success/Error Messages */}
+          {error && (
+            <div className="bg-red-50 border-b border-red-200 p-4 flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+              <p className="text-red-700">{error}</p>
             </div>
-          </div>
+          )}
+          
+          {success && (
+            <div className="bg-green-50 border-b border-green-200 p-4 flex items-center gap-3">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+              <p className="text-green-700">{success}</p>
+            </div>
+          )}
 
-          {/* Reason for applying */}
-          <div>
-            <label className="block font-medium mb-2">
-              Reason for Applying *
-            </label>
-            <textarea
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              placeholder="Explain why you are applying for this scheme..."
-              rows={4}
-              required
-            />
-          </div>
+          <div className="p-6">
+            {!student ? (
+              <div className="text-center py-12">
+                <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">Failed to load student details. Please try again.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Student Info Card */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <User className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">Student Information</h3>
+                  </div>
 
-          {/* Document Uploads */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">
-              Upload Documents *
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Accepted formats: JPG, PNG, PDF (Max size: 5MB each)
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { key: "aadhaar", label: "Aadhaar Card" },
-                { key: "income", label: "Income Certificate" },
-                { key: "bonafide", label: "College Bonafide" },
-                { key: "bankPassbook", label: "Bank Passbook" },
-                { key: "marksheet", label: "Previous Year Marksheet" },
-              ].map((doc) => (
-                <div key={doc.key}>
-                  <label className="block font-medium mb-2">{doc.label}</label>
-                  <input
-                    type="file"
-                    onChange={(e) => handleFileChange(e, doc.key)}
-                    className="w-full p-2 border rounded"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    required
-                  />
-                  {documents[doc.key] && (
-                    <p className="text-sm text-green-600 mt-1">
-                      ✓ {documents[doc.key].name}
-                    </p>
-                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InfoField label="Full Name" value={student.fullName} icon={<User size={16} />} />
+                    <InfoField label="Date of Birth" value={formatDate(student.dob)} icon={<Calendar size={16} />} />
+                    <InfoField label="Bank Name" value={student.bankName} icon={<Building size={16} />} />
+                    <InfoField 
+                      label="Account Number" 
+                      value={student.accountNumber ? `****${student.accountNumber.slice(-4)}` : "N/A"} 
+                      icon={<CreditCard size={16} />} 
+                    />
+                    <InfoField label="IFSC Code" value={student.ifsc} icon={<CreditCard size={16} />} />
+                    <InfoField label="Mobile Number" value={student.mobile} icon={<Phone size={16} />} />
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full ${
-                isSubmitting 
-                  ? "bg-gray-400 cursor-not-allowed" 
-                  : "bg-blue-600 hover:bg-blue-700"
-              } text-white py-3 px-6 rounded-lg font-semibold transition-colors`}
-            >
-              {isSubmitting ? "Submitting..." : "Submit Application"}
-            </button>
+                {/* Reason for Application */}
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <FileText className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">Application Details</h3>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Reason for Applying *
+                    </label>
+                    <textarea
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
+                      placeholder="Please explain why you are applying for this scholarship scheme. Include any relevant circumstances or needs that support your application..."
+                      rows={4}
+                      required
+                    />
+                    <p className="text-sm text-gray-500">
+                      {reason.length}/500 characters
+                    </p>
+                  </div>
+                </div>
+
+                {/* Document Uploads */}
+                <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-6 border border-green-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <Upload className="h-5 w-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-800">Required Documents</h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Accepted formats: JPG, PNG, PDF (Max size: 5MB each)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {["aadhaar", "income", "bonafide", "bankPassbook", "marksheet"].map((docKey) => (
+                      <div key={docKey} className="group">
+                        <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          {documentIcons[docKey]}
+                          {documentLabels[docKey]} *
+                        </label>
+                        
+                        {documents[docKey] ? (
+                          <div className="relative bg-white border border-green-200 rounded-xl p-4">
+                            <div className="flex items-center gap-3">
+                              <FileCheck className="h-5 w-5 text-green-500" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-800 truncate">
+                                  {documents[docKey].name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {(documents[docKey].size / 1024 / 1024).toFixed(2)} MB
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(docKey)}
+                                className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                              >
+                                <X size={16} />
+                              </button>
+                            </div>
+                            {uploadProgress[docKey] > 0 && uploadProgress[docKey] < 100 && (
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                                <div
+                                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${uploadProgress[docKey]}%` }}
+                                ></div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all group-hover:scale-105">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <Upload className="w-8 h-8 mb-3 text-gray-400 group-hover:text-blue-500" />
+                              <p className="mb-2 text-sm text-gray-500">
+                                <span className="font-semibold">Click to upload</span>
+                              </p>
+                              <p className="text-xs text-gray-500">PDF, PNG, JPG</p>
+                            </div>
+                            <input
+                              type="file"
+                              onChange={(e) => handleFileChange(e, docKey)}
+                              className="hidden"
+                              accept=".jpg,.jpeg,.png,.pdf"
+                              required
+                            />
+                          </label>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 text-white px-8 py-4 rounded-xl font-semibold transition-all hover:shadow-lg transform hover:scale-105"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader className="animate-spin h-5 w-5" />
+                        Submitting Application...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        Submit Application
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
-        </form>
-      )}
+        </div>
+
+        {/* Help Text */}
+        <div className="text-center mt-6">
+          <p className="text-sm text-gray-600">
+            Need help? Contact support at{" "}
+            <a href="mailto:support@pmsss.gov.in" className="text-blue-600 hover:underline">
+              support@pmsss.gov.in
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
+
+// Helper component for display fields
+const InfoField = ({ label, value, icon }) => (
+  <div className="space-y-2">
+    <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+      {icon}
+      {label}
+    </label>
+    <p className="p-3 bg-white rounded-lg border border-gray-200 text-gray-800">
+      {value || "N/A"}
+    </p>
+  </div>
+);

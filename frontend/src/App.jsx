@@ -9,6 +9,7 @@ import Apply from "./pages/student/ApplyScheme";
 // import Transactions from "./pages/student/Transactions";
 import Profile from "./pages/student/Profile";
 import DashboardLayout from "./pages/student/Dashboard";
+import StudentDashboardHome from "./pages/student/StudentDashboardHome";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/student" element={<DashboardLayout />}>
+        <Route index element={<StudentDashboardHome />} />
         <Route path="apply" element={<Apply />} />
         {/* <Route path="upload" element={<UploadDocs />} /> */}
         {/* <Route path="status" element={<Status />} /> */}

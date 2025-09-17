@@ -38,16 +38,44 @@ export default function DashboardLayout() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Skip backend call for now, use mock data
-    setIsLoading(true);
-    setTimeout(() => {
-      setStudent({
-        username: "Student User",
-        email: "student@example.com"
-      });
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+    const fetchStudent = async () => {
+      if (!token) {
+        setError("Authentication required. Please login again.");
+        setIsLoading(false);
+        navigate("/login");
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError("");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/student/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem("token");
+            navigate("/login");
+            return;
+          }
+          throw new Error(`Failed to fetch student details: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setStudent(data);
+      } catch (error) {
+        console.error("Error fetching student details:", error);
+        setError("Failed to load student information. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStudent();
+  }, [token, navigate, retryCount]);
 
   const navItems = [
     { title: "Dashboard", icon: <Home size={20} />, path: "/student" },
@@ -233,123 +261,6 @@ export default function DashboardLayout() {
               className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group
                 ${
                   location.pathname === item.path
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                    : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                }
-              `}
-            >
-              <span className="transition-colors">{item.icon}</span>
-              <span className="font-medium">{item.title}</span>
-            </Link>
-          ))}
-        </nav>
-
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200 mt-4"
-        >
-          <LogOut size={20} />
-          <span className="font-medium">Logout</span>
-        </button>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                className="lg:hidden p-2 rounded-xl hover:bg-gray-100/50 transition-colors"
-                onClick={() => setSidebarOpen(true)}
-                aria-label="Open sidebar"
-              >
-                <Menu size={20} className="text-gray-600" />
-              </button>
-              <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-            </div>
-          </div>
-        </header>
-
-        {/* Dashboard Content */}
-        <div className="flex-1 p-6 overflow-auto">
-          <div className="max-w-7xl mx-auto">
-            {/* Welcome Card */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white mb-8">
-              <h2 className="text-3xl font-bold mb-2">Welcome back, {student?.username}!</h2>
-              <p className="text-blue-100">Here's your scholarship dashboard overview</p>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 text-sm">Applications</p>
-                    <p className="text-2xl font-bold text-gray-800">3</p>
-                  </div>
-                  <FilePlus className="text-blue-600" size={24} />
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 text-sm">Approved</p>
-                    <p className="text-2xl font-bold text-green-600">2</p>
-                  </div>
-                  <CheckCircle className="text-green-600" size={24} />
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 text-sm">Total Amount</p>
-                    <p className="text-2xl font-bold text-indigo-600">₹50,000</p>
-                  </div>
-                  <Receipt className="text-indigo-600" size={24} />
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 text-sm">Profile</p>
-                    <p className="text-2xl font-bold text-purple-600">85%</p>
-                  </div>
-                  <User className="text-purple-600" size={24} />
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
-                  <CheckCircle className="text-green-600" size={20} />
-                  <div>
-                    <p className="font-medium text-gray-800">Application Approved</p>
-                    <p className="text-sm text-gray-600">Your PMSSS application has been approved</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 p-4 bg-yellow-50 rounded-xl">
-                  <AlertCircle className="text-yellow-600" size={20} />
-                  <div>
-                    <p className="font-medium text-gray-800">Document Verification</p>
-                    <p className="text-sm text-gray-600">Please upload your latest marksheet</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}ocation.pathname === item.path
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
                     : "text-gray-700 hover:bg-white/80 hover:shadow-md"
                 }`}

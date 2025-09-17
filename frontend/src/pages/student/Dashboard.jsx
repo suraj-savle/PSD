@@ -34,11 +34,8 @@ export default function DashboardLayout() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const token =
-    localStorage.getItem("token") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEwODg4NywiZXhwIjoxNzU4MTEyNDg3fQ.9353nKaqkYiDwAkMdR3JHIe3lXORaAK68_kK0xmfDpg";
+  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODExNDkxNCwiZXhwIjoxNzU4MTE4NTE0fQ.fB79hY_VCOEIqiXtIuBzNKZEEIB5AvbDQ3a_NX-kk6E";
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -311,14 +308,7 @@ export default function DashboardLayout() {
               
               {/* Search Bar */}
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 bg-gray-100/50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white w-64 transition-all"
-                />
+               
               </div>
             </div>
 
@@ -484,7 +474,7 @@ export default function DashboardLayout() {
         )}
 
         {/* Page content */}
-        <div className="flex-1 p-6 overflow-auto">
+        <div className="flex-1 overflow-auto">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-white/20 min-h-[calc(100vh-12rem)]">
             <Outlet />
           </div>

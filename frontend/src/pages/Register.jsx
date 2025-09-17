@@ -141,15 +141,33 @@ export default function Register() {
     window.scrollTo(0, 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateSection()) {
-      console.log("Form Submitted:", formData);
-      toast.success('Registration successful! Redirecting to dashboard...');
-      setTimeout(() => {
-        navigate('/student/dashboard');
-      }, 2000);
-      // TODO: connect to backend API
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          toast.success('Registration successful! Redirecting to dashboard...');
+          setTimeout(() => {
+            navigate('/student/dashboard');
+          }, 2000);
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Registration failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        toast.error('Network error. Please check your connection and try again.');
+      }
     } else {
       toast.error('Please fill all required fields correctly');
     }

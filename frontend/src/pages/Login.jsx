@@ -10,12 +10,41 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    toast.success("Login successful! Redirecting to dashboard...");
-    setTimeout(() => {
-      navigate('/student/dashboard');
-    }, 1500);
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        toast.success("Login successful! Redirecting to dashboard...");
+        setTimeout(() => {
+          navigate('/student/dashboard');
+        }, 1500);
+      } else if (response.status === 404) {
+        toast.error("You don't have an account yet. Please register first.");
+        setTimeout(() => {
+          navigate('/register');
+        }, 2000);
+      } else {
+        toast.error(data.message || 'Invalid credentials. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('Network error. Please check your connection and try again.');
+    }
   }
 
   return (

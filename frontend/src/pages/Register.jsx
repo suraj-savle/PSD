@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -27,6 +29,14 @@ export default function Register() {
     mobile: "",
     parentsAddress: "",
 
+    // Academic Details
+    course: "",
+    institution: "",
+    yearOfStudy: "",
+    previousMarks: "",
+    category: "",
+    annualIncome: "",
+    
     // Bank Details
     bank: "",
     branch: "",
@@ -39,11 +49,12 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [currentSection, setCurrentSection] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const sections = [
     "User Details",
     "Personal Details",
-    "Parent Details",
+    "Academic Details",
     "Bank Details"
   ];
 
@@ -86,6 +97,15 @@ export default function Register() {
     }
     
     if (currentSection === 2) {
+      if (!formData.course) newErrors.course = "Course is required";
+      if (!formData.institution) newErrors.institution = "Institution is required";
+      if (!formData.yearOfStudy) newErrors.yearOfStudy = "Year of study is required";
+      if (!formData.previousMarks) newErrors.previousMarks = "Previous marks are required";
+      if (!formData.category) newErrors.category = "Category is required";
+      if (!formData.annualIncome) newErrors.annualIncome = "Annual income is required";
+    }
+    
+    if (currentSection === 3) {
       if (!formData.fatherName) newErrors.fatherName = "Father's name is required";
       if (!formData.motherName) newErrors.motherName = "Mother's name is required";
       if (!formData.mobile) newErrors.mobile = "Mobile number is required";
@@ -93,7 +113,7 @@ export default function Register() {
       if (!formData.parentsAddress) newErrors.parentsAddress = "Address is required";
     }
     
-    if (currentSection === 3) {
+    if (currentSection === 4) {
       if (!formData.bank) newErrors.bank = "Please select a bank";
       if (!formData.branch) newErrors.branch = "Branch name is required";
       if (!formData.accountHolder) newErrors.accountHolder = "Account holder name is required";
@@ -111,6 +131,8 @@ export default function Register() {
     if (validateSection()) {
       setCurrentSection(currentSection + 1);
       window.scrollTo(0, 0);
+    } else {
+      toast.error('Please fill all required fields correctly');
     }
   };
 
@@ -123,8 +145,13 @@ export default function Register() {
     e.preventDefault();
     if (validateSection()) {
       console.log("Form Submitted:", formData);
-      setSubmitted(true);
+      toast.success('Registration successful! Redirecting to dashboard...');
+      setTimeout(() => {
+        navigate('/student/dashboard');
+      }, 2000);
       // TODO: connect to backend API
+    } else {
+      toast.error('Please fill all required fields correctly');
     }
   };
 
@@ -153,25 +180,37 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-10 px-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8 px-4">
+      {/* Header */}
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:from-indigo-700 hover:to-purple-700 transition-all">
+            PMSSS
+          </Link>
+          <Link to="/login" className="px-6 py-2 border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-all transform hover:scale-105 font-medium">
+            Login
+          </Link>
+        </div>
+      </div>
+      
+      <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
         {/* Progress Bar */}
-        <div className="bg-gray-100 px-8 py-4">
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-4">
           <div className="flex justify-between items-center mb-2">
             {sections.map((section, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                     index <= currentSection
-                      ? "bg-blue-600 text-white"
+                      ? "bg-indigo-600 text-white shadow-lg"
                       : "bg-gray-300 text-gray-600"
                   }`}
                 >
                   {index + 1}
                 </div>
                 <span
-                  className={`text-xs mt-1 ${
-                    index === currentSection ? "font-bold text-blue-600" : "text-gray-600"
+                  className={`text-sm mt-2 ${
+                    index === currentSection ? "font-bold text-indigo-600" : "text-gray-600"
                   }`}
                 >
                   {section}
@@ -181,25 +220,27 @@ export default function Register() {
           </div>
           <div className="w-full bg-gray-300 h-2 rounded-full">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-indigo-600 h-3 rounded-full transition-all duration-500 shadow-sm"
               style={{ width: `${((currentSection + 1) / sections.length) * 100}%` }}
             ></div>
           </div>
         </div>
 
         <div className="p-8">
-          <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">
-            PMSSS Scholarship Registration
-          </h2>
-          <p className="text-center text-gray-600 mb-8">
-            Complete all sections to apply for the Prime Minister's Special Scholarship Scheme
-          </p>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              PMSSS Scholarship Registration
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Complete all sections to apply for the scholarship
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit}>
             {/* ================= User Details ================= */}
             {currentSection === 0 && (
               <section className="space-y-6">
-                <h3 className="text-lg font-semibold text-blue-800 border-b pb-2">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-6">
                   User Account Details
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,8 +252,8 @@ export default function Register() {
                       value={formData.username}
                       onChange={handleChange}
                       required
-                      className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
-                        errors.username ? "border-red-500" : "border-gray-300"
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.username ? "border-red-500" : "border-gray-200 hover:border-gray-300"
                       }`}
                     />
                     {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
@@ -260,9 +301,9 @@ export default function Register() {
                     {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
                   </div>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm text-blue-700 flex items-start">
-                    <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <div className="bg-indigo-50 border border-indigo-200 p-5 rounded-xl">
+                  <p className="text-sm text-indigo-700 flex items-start">
+                    <svg className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                     Your password must be at least 6 characters long. Keep it secure as it will be used to access your scholarship portal.
@@ -274,7 +315,7 @@ export default function Register() {
             {/* ================= Personal Details ================= */}
             {currentSection === 1 && (
               <section className="space-y-6">
-                <h3 className="text-lg font-semibold text-blue-800 border-b pb-2">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-6">
                   Personal Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -386,10 +427,118 @@ export default function Register() {
               </section>
             )}
 
-            {/* ================= Parent Details ================= */}
+            {/* ================= Academic Details ================= */}
             {currentSection === 2 && (
-              <section className="space-y-6">
-                <h3 className="text-lg font-semibold text-blue-800 border-b pb-2">
+              <section className="space-y-4">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-4">
+                  Academic Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="course"
+                      placeholder="Course/Program Name"
+                      value={formData.course}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.course ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    />
+                    {errors.course && <p className="text-red-500 text-sm mt-1">{errors.course}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="institution"
+                      placeholder="Institution/College Name"
+                      value={formData.institution}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.institution ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    />
+                    {errors.institution && <p className="text-red-500 text-sm mt-1">{errors.institution}</p>}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <select
+                      name="yearOfStudy"
+                      value={formData.yearOfStudy}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.yearOfStudy ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <option value="">Year of Study</option>
+                      <option value="1">1st Year</option>
+                      <option value="2">2nd Year</option>
+                      <option value="3">3rd Year</option>
+                      <option value="4">4th Year</option>
+                    </select>
+                    {errors.yearOfStudy && <p className="text-red-500 text-sm mt-1">{errors.yearOfStudy}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="previousMarks"
+                      placeholder="Previous Year %"
+                      value={formData.previousMarks}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.previousMarks ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    />
+                    {errors.previousMarks && <p className="text-red-500 text-sm mt-1">{errors.previousMarks}</p>}
+                  </div>
+                  <div>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      required
+                      className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                        errors.category ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <option value="">Category</option>
+                      <option value="general">General</option>
+                      <option value="obc">OBC</option>
+                      <option value="sc">SC</option>
+                      <option value="st">ST</option>
+                    </select>
+                    {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+                  </div>
+                </div>
+                
+                <div>
+                  <input
+                    type="text"
+                    name="annualIncome"
+                    placeholder="Family Annual Income (₹)"
+                    value={formData.annualIncome}
+                    onChange={handleChange}
+                    required
+                    className={`w-full border-2 rounded-xl px-5 py-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-gray-50/50 hover:bg-white ${
+                      errors.annualIncome ? "border-red-500" : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  />
+                  {errors.annualIncome && <p className="text-red-500 text-sm mt-1">{errors.annualIncome}</p>}
+                </div>
+              </section>
+            )}
+
+            {/* ================= Parent Details ================= */}
+            {currentSection === 3 && (
+              <section className="space-y-4">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-4">
                   Parents/Guardian Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -511,13 +660,13 @@ export default function Register() {
             )}
 
             {/* ================= Bank Details ================= */}
-            {currentSection === 3 && (
-              <section className="space-y-6">
-                <h3 className="text-lg font-semibold text-blue-800 border-b pb-2">
+            {currentSection === 4 && (
+              <section className="space-y-4">
+                <h3 className="text-xl font-semibold text-indigo-700 mb-4">
                   Bank Account Information
                 </h3>
-                <div className="bg-blue-50 p-4 rounded-lg mb-4">
-                  <p className="text-sm text-blue-700">
+                <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl mb-4">
+                  <p className="text-sm text-indigo-700">
                     <span className="font-semibold">Important:</span> Scholarship amounts will be disbursed to this account. 
                     Please ensure all details are accurate.
                   </p>
@@ -628,9 +777,9 @@ export default function Register() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="px-6 py-2 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition"
+                  className="px-10 py-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg border border-gray-200"
                 >
-                  Previous
+                  ← Previous
                 </button>
               ) : (
                 <div></div>
@@ -640,22 +789,50 @@ export default function Register() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
+                  className="px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl"
                 >
-                  Next
+                  Next →
                 </button>
               ) : (
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition"
+                  className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-xl"
                 >
-                  Submit Application
+                  🎓 Submit Application
                 </button>
               )}
             </div>
           </form>
         </div>
       </div>
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#fff',
+            color: '#374151',
+            borderRadius: '12px',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #e5e7eb',
+            padding: '16px 20px',
+            fontSize: '16px',
+            fontWeight: '500'
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff'
+            }
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff'
+            }
+          }
+        }}
+      />
     </div>
   );
 }

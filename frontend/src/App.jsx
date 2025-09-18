@@ -11,6 +11,13 @@ import AboutUs from "./pages/AboutUs";
 import Profile from "./pages/student/Profile";
 import DashboardLayout from "./pages/student/Dashboard";
 import StudentDashboardHome from "./pages/student/StudentDashboardHome";
+import FinanceDashboard from "./pages/finance/Dashboard";
+import FinanceDashboardHome from "./pages/finance/FinanceDashboardHome";
+import FinanceLogin from "./pages/finance/FinanceLogin";
+import ApprovedStudents from "./pages/finance/ApprovedStudents";
+import Disbursements from "./pages/finance/Disbursements";
+import Transactions from "./pages/finance/Transactions";
+import Settings from "./pages/finance/Settings";
 
 function App() {
   return (
@@ -28,6 +35,14 @@ function App() {
         {/* <Route path="status" element={<Status />} /> */}
         {/* <Route path="transactions" element={<Transactions />} /> */}
         <Route path="profile" element={<Profile />} />
+      </Route>
+
+      <Route path="/finance" element={<FinanceDashboard />}>
+        <Route index element={<FinanceDashboardHome />} />
+        <Route path="approved" element={<ApprovedStudents />} />
+        <Route path="disbursements" element={<Disbursements />} />
+        <Route path="transactions" element={<Transactions />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );

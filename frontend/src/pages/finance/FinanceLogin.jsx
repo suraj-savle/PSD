@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import { Calculator, Shield, Eye, EyeOff } from "lucide-react";
 
-export default function Login() {
-  const [formData, setFormData] = useState({ username: "", password: "" });
+export default function FinanceLogin() {
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   
   const handleChange = (e) => {
@@ -41,65 +43,40 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     
-    if (!formData.username || !formData.password) {
+    if (!formData.email || !formData.password) {
       toast.error('Please fill in all fields');
       return;
     }
     
-    if (formData.username.trim().length < 3) {
-      toast.error('Invalid username/email/mobile format');
-      return;
-    }
+    setIsLoading(true);
     
-    // Check if it's a finance admin login
-    const financeAdmin = validateFinanceAdmin(formData.username, formData.password);
-    if (financeAdmin) {
-      localStorage.setItem('financeToken', 'finance_admin_token');
-      localStorage.setItem('financeAdmin', JSON.stringify({
-        email: financeAdmin.email,
-        name: financeAdmin.name,
-        role: financeAdmin.role
-      }));
-      
-      toast.success(`Welcome ${financeAdmin.name}! Redirecting to Finance Dashboard...`);
-      setTimeout(() => {
-        navigate('/finance');
-      }, 1500);
-      return;
-    }
-    
-    // Regular student login
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          identifier: formData.username,
-          password: formData.password,
-        }),
-      });
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const data = await response.json();
+      const validAdmin = validateFinanceAdmin(formData.email, formData.password);
       
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        toast.success("Login successful! Redirecting to dashboard...");
+      if (validAdmin) {
+        // Store finance admin session
+        localStorage.setItem('financeToken', 'finance_admin_token');
+        localStorage.setItem('financeAdmin', JSON.stringify({
+          email: validAdmin.email,
+          name: validAdmin.name,
+          role: validAdmin.role
+        }));
+        
+        toast.success(`Welcome ${validAdmin.name}! Redirecting to Finance Dashboard...`);
         setTimeout(() => {
-          navigate('/student');
+          navigate('/finance');
         }, 1500);
-      } else if (response.status === 404) {
-        toast.error("You don't have an account yet. Please register first.");
-        setTimeout(() => {
-          navigate('/register');
-        }, 2000);
       } else {
-        toast.error(data.message || 'Invalid credentials. Please try again.');
+        toast.error('Invalid credentials. Access denied to Finance Dashboard.');
       }
     } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Network error. Please check your connection and try again.');
+      console.error('Finance login error:', error);
+      toast.error('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -114,26 +91,32 @@ export default function Login() {
       
       <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8">
         <div className="text-center mb-8">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 rounded-xl w-16 h-16 mx-auto mb-4">
+            <Calculator size={32} className="text-white" />
+          </div>
           <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Welcome Back
+            Finance Portal
           </h2>
-          <p className="text-gray-600">Sign in to your PMSSS account</p>
+          <p className="text-gray-600 flex items-center justify-center gap-2">
+            <Shield size={16} />
+            Authorized Access Only
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Username / Email */}
+          {/* Email */}
           <div>
             <label className="block text-gray-700 font-semibold mb-2">
-              Username / Email / Mobile
+              Admin Email
             </label>
             <input
-              type="text"
-              name="username"
-              value={formData.username}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
               className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-gray-50/50 hover:bg-white"
-              placeholder="Enter your username, email, or mobile number"
+              placeholder="Enter your admin email"
             />
           </div>
 
@@ -157,39 +140,41 @@ export default function Login() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
               >
-                {showPassword ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
-
-
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl"
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            🔐 Sign In
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Authenticating...
+              </div>
+            ) : (
+              <>🔐 Access Finance Dashboard</>
+            )}
           </button>
         </form>
         
-        {/* Register Link */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors">
-              Register here
-            </Link>
+        {/* Info */}
+        <div className="mt-8 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+          <p className="text-sm text-indigo-700 text-center">
+            <Shield size={16} className="inline mr-1" />
+            This portal is restricted to authorized finance personnel only.
           </p>
+        </div>
+        
+        {/* Back to main site */}
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline transition-colors">
+            ← Back to Main Site
+          </Link>
         </div>
       </div>
       

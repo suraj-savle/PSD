@@ -168,77 +168,72 @@ export default function FinanceDashboardHome() {
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Finance Dashboard</h1>
           <p className="text-gray-600">Manage SAG approved students and scholarship disbursements</p>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <button className="flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-            <Download size={16} />
-            Export Report
-          </button>
-        </div>
+
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 lg:p-6 text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-3 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-indigo-100 text-sm">Total Funds Available</p>
-              <p className="text-xl lg:text-2xl font-bold">{formatCurrency(stats.totalFunds)}</p>
+              <p className="text-indigo-100 text-xs">Total Funds Available</p>
+              <p className="text-lg font-bold">{formatCurrency(stats.totalFunds)}</p>
             </div>
-            <div className="bg-white/20 p-2 lg:p-3 rounded-lg">
-              <DollarSign size={20} className="lg:w-6 lg:h-6" />
+            <div className="bg-white/20 p-2 rounded-lg">
+              <DollarSign size={18} />
             </div>
           </div>
-          <div className="flex items-center gap-1 mt-3 lg:mt-4 text-indigo-100">
-            <TrendingUp size={14} className="lg:w-4 lg:h-4" />
-            <span className="text-xs lg:text-sm">Budget allocated</span>
+          <div className="flex items-center gap-1 mt-2 text-indigo-100">
+            <TrendingUp size={12} />
+            <span className="text-xs">Budget allocated</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm">Funds Disbursed</p>
-              <p className="text-xl lg:text-2xl font-bold text-gray-900">{formatCurrency(stats.disbursed)}</p>
+              <p className="text-gray-600 text-xs">Funds Disbursed</p>
+              <p className="text-lg font-bold text-gray-900">{formatCurrency(stats.disbursed)}</p>
             </div>
-            <div className="bg-green-100 p-2 lg:p-3 rounded-lg">
-              <ArrowUpRight size={20} className="lg:w-6 lg:h-6 text-green-600" />
+            <div className="bg-green-100 p-2 rounded-lg">
+              <ArrowUpRight size={18} className="text-green-600" />
             </div>
           </div>
-          <div className="flex items-center gap-1 mt-3 lg:mt-4 text-green-600">
-            <CheckCircle size={14} className="lg:w-4 lg:h-4" />
-            <span className="text-xs lg:text-sm">{disbursedStudents.length} students paid</span>
+          <div className="flex items-center gap-1 mt-2 text-green-600">
+            <CheckCircle size={12} />
+            <span className="text-xs">{disbursedStudents.length} students paid</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm">Pending Disbursements</p>
-              <p className="text-xl lg:text-2xl font-bold text-gray-900">{formatCurrency(stats.pending)}</p>
+              <p className="text-gray-600 text-xs">Pending Disbursements</p>
+              <p className="text-lg font-bold text-gray-900">{formatCurrency(stats.pending)}</p>
             </div>
-            <div className="bg-yellow-100 p-2 lg:p-3 rounded-lg">
-              <Clock size={20} className="lg:w-6 lg:h-6 text-yellow-600" />
+            <div className="bg-yellow-100 p-2 rounded-lg">
+              <Clock size={18} className="text-yellow-600" />
             </div>
           </div>
-          <div className="flex items-center gap-1 mt-3 lg:mt-4 text-yellow-600">
-            <AlertCircle size={14} className="lg:w-4 lg:h-4" />
-            <span className="text-xs lg:text-sm">{pendingStudents.length} awaiting payment</span>
+          <div className="flex items-center gap-1 mt-2 text-yellow-600">
+            <AlertCircle size={12} />
+            <span className="text-xs">{pendingStudents.length} awaiting payment</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm">SAG Approved Students</p>
-              <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.activeScholars}</p>
+              <p className="text-gray-600 text-xs">SAG Approved Students</p>
+              <p className="text-lg font-bold text-gray-900">{stats.activeScholars}</p>
             </div>
-            <div className="bg-blue-100 p-2 lg:p-3 rounded-lg">
-              <Users size={20} className="lg:w-6 lg:h-6 text-blue-600" />
+            <div className="bg-blue-100 p-2 rounded-lg">
+              <Users size={18} className="text-blue-600" />
             </div>
           </div>
-          <div className="flex items-center gap-1 mt-3 lg:mt-4 text-blue-600">
-            <TrendingUp size={14} className="lg:w-4 lg:h-4" />
-            <span className="text-xs lg:text-sm">Ready for disbursement</span>
+          <div className="flex items-center gap-1 mt-2 text-blue-600">
+            <TrendingUp size={12} />
+            <span className="text-xs">Ready for disbursement</span>
           </div>
         </div>
       </div>

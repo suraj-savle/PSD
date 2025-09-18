@@ -67,6 +67,9 @@ const Landing = () => {
             <a href="#about" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
               About
             </a>
+            <a href="/about#apply" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
+              How to Apply
+            </a>
             <a href="#features" className={`${isDarkMode ? 'text-white hover:text-blue-300' : 'text-gray-900 hover:text-blue-600'} transition-colors`}>
               Features
             </a>
@@ -97,8 +100,8 @@ const Landing = () => {
               href="/login"
               className={`px-4 py-2 border rounded-md transition-colors ${
                 isDarkMode 
-                  ? 'border-white text-white hover:bg-white hover:text-gray-900' 
-                  : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'
+                  ? 'border-white text-white hover:bg-indigo-500 hover:border-indigo-500' 
+                  : 'border-gray-900 text-gray-900 hover:bg-indigo-500 hover:text-white hover:border-indigo-500'
               }`}
             >
               Login
@@ -128,6 +131,9 @@ const Landing = () => {
             <div className="flex flex-col space-y-4">
               <a href="#about" className="text-white hover:text-blue-300 transition-colors">
                 About
+              </a>
+              <a href="/about#apply" className="text-white hover:text-blue-300 transition-colors">
+                How to Apply
               </a>
               <a href="#features" className="text-white hover:text-blue-300 transition-colors">
                 Features
@@ -225,13 +231,13 @@ const Landing = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-on-scroll">
               <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Our Mission</h3>
               <p className={`text-lg leading-relaxed mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 To provide transparent, efficient, and accessible scholarship opportunities that empower students to pursue their academic dreams without financial barriers. We believe in creating equal opportunities for all deserving students.
               </p>
-              <div className="space-y-4">
+              <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Supporting over 10,000+ students annually</p>
@@ -245,9 +251,13 @@ const Landing = () => {
                   <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Direct benefit transfer to student accounts</p>
                 </div>
               </div>
-            </div>
-            
-            <div className={`p-8 rounded-2xl animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+              <a href="/about" className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                Learn More About Us
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>            <div className={`p-8 rounded-2xl animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
               <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Key Benefits</h3>
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
@@ -392,65 +402,52 @@ const Landing = () => {
       </section>
       
       {/* Contact Section */}
-      <section id="contact" className={`py-24 ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-6 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Get In Touch</h2>
-            <div className={`w-24 h-1 mx-auto mb-8 animate-on-scroll ${isDarkMode ? 'bg-indigo-400' : 'bg-indigo-600'}`}></div>
-            <p className={`text-xl mb-12 max-w-3xl mx-auto animate-on-scroll ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Have questions about the PMSSS application process? Our dedicated support team is here to guide you through every step of your scholarship journey.
+      <section id="contact" className={`py-20 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className={`text-3xl font-bold mb-4 animate-on-scroll ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Get In Touch</h2>
+            <p className={`text-lg max-w-2xl mx-auto animate-on-scroll ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Have questions about PMSSS? We're here to help you with your scholarship journey.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className={`p-8 rounded-3xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 hover:border-indigo-500' : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-indigo-300 shadow-xl hover:shadow-2xl'}`} style={{animationDelay: '0.1s'}}>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className={`p-6 rounded-lg transition-all duration-300 animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Email Support</h3>
-                <p className={`mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Get detailed assistance via email for all your scholarship queries</p>
-                <a href="mailto:support@pmsss.gov.in" className={`inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 ${isDarkMode ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} shadow-lg`}>
-                  📧 Send Email
-                </a>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Email Support</h3>
+                  <p className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Get detailed assistance for your queries</p>
+                  <a href="mailto:support@pmsss.gov.in" className="text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+                    support@pmsss.gov.in
+                  </a>
+                </div>
               </div>
             </div>
             
-            <div className={`p-8 rounded-3xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 hover:border-green-500' : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-green-300 shadow-xl hover:shadow-2xl'}`} style={{animationDelay: '0.2s'}}>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className={`p-6 rounded-lg transition-all duration-300 animate-on-scroll ${isDarkMode ? 'bg-black border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
-                <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Phone Support</h3>
-                <p className={`mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Speak directly with our support team for immediate assistance</p>
-                <a href="tel:1800-XXX-XXXX" className={`inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 ${isDarkMode ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'} shadow-lg`}>
-                  📞 Call Now
-                </a>
-              </div>
-            </div>
-            
-            <div className={`p-8 rounded-3xl transition-all duration-300 hover:scale-105 animate-on-scroll ${isDarkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 hover:border-orange-500' : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-orange-300 shadow-xl hover:shadow-2xl'}`} style={{animationDelay: '0.3s'}}>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Office Hours</h3>
-                <p className={`mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>We're available during these hours</p>
-                <div className={`space-y-2 ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>
-                  <p className="font-semibold">Monday - Friday</p>
-                  <p className="text-lg">9:00 AM - 6:00 PM</p>
-                  <p className="font-semibold mt-3">Saturday</p>
-                  <p className="text-lg">10:00 AM - 2:00 PM</p>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Phone Support</h3>
+                  <p className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Speak with our support team</p>
+                  <a href="tel:1800-XXX-XXXX" className="text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+                    1800-XXX-XXXX
+                  </a>
                 </div>
               </div>
             </div>
           </div>
+          
+
         </div>
       </section>
       

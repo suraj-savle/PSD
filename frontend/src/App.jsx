@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Apply from "./pages/student/ApplyScheme";
+import AboutUs from "./pages/AboutUs";
 // import UploadDocs from "./pages/student/UploadDocs";
 // import Status from "./pages/student/Status";
 // import Transactions from "./pages/student/Transactions";
@@ -18,6 +19,7 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/about" element={<AboutUs />} />
 
       <Route path="/student" element={<DashboardLayout />}>
         <Route index element={<StudentDashboardHome />} />

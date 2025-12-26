@@ -17,15 +17,14 @@ import FinanceLogin from "./pages/finance/FinanceLogin";
 import ApprovedStudents from "./pages/finance/ApprovedStudents";
 import Disbursements from "./pages/finance/Disbursements";
 import Transactions from "./pages/finance/Transactions";
-import Settings from "./pages/finance/Settings";
 
 function App() {
   return (
     <Routes>
       {/* Define your routes here */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/about" element={<AboutUs />} />
 
       <Route path="/student" element={<DashboardLayout />}>

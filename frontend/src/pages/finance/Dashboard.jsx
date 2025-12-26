@@ -28,7 +28,7 @@ export default function FinanceDashboard() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [admin, setAdmin] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const financeToken = localStorage.getItem("financeToken");
   const financeAdmin = localStorage.getItem("financeAdmin");
@@ -140,7 +140,7 @@ export default function FinanceDashboard() {
               <Calculator size={28} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 PMSSS
               </h1>
               <p className="text-xs text-gray-500">Finance Portal</p>

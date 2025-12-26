@@ -1,13 +1,7 @@
-// routes/studentRoutes.js
 import express from "express";
+const router = express.Router();
 import User from "../models/User.js"; // your user schema
 import { authMiddleware } from "../middleware/authMiddleware.js";
-
-
-
-const router = express.Router();
-
-
 
 
 // ✅ Get student profile

@@ -94,8 +94,6 @@ export default function DashboardLayout() {
       icon: <Receipt size={20} />,
       path: "/student/transactions",
     },
-    { title: "My Courses", icon: <BookOpen size={20} />, path: "/student/courses" },
-    { title: "Schedule", icon: <Calendar size={20} />, path: "/student/schedule" },
     { title: "Profile", icon: <User size={20} />, path: "/student/profile" },
     { title: "Settings", icon: <Settings size={20} />, path: "/student/settings" },
   ];
@@ -194,8 +192,8 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Mobile overlay */}
+    <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden backdrop-blur-sm"
@@ -214,7 +212,7 @@ export default function DashboardLayout() {
         {/* Logo */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-xl">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl">
               <Award size={28} className="text-white" />
             </div>
             <div>
@@ -234,9 +232,9 @@ export default function DashboardLayout() {
         </div>
 
         {/* User profile summary */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 mb-8 border border-blue-100/50">
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-5 mb-8 border border-indigo-100/50">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
+            <div className="w-14 h-14 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
               {student?.username?.charAt(0)?.toUpperCase() || "U"}
             </div>
             <div className="overflow-hidden">
@@ -261,11 +259,11 @@ export default function DashboardLayout() {
               className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group
                 ${
                   location.pathname === item.path
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
                     : "text-gray-700 hover:bg-white/80 hover:shadow-md"
                 }`}
             >
-              <div className={`${location.pathname === item.path ? "text-white" : "text-gray-500 group-hover:text-blue-600"}`}>
+               <div className={`${location.pathname === item.path ? "text-white" : "text-gray-500 group-hover:text-indigo-600"}`}>
                 {item.icon}
               </div>
               <span className="font-medium">{item.title}</span>
@@ -307,8 +305,9 @@ export default function DashboardLayout() {
               </button>
               
               {/* Search Bar */}
-              <div className="relative hidden md:block">
-               
+               <div>
+                <h2 className="text-xl font-semibold text-gray-800">Student Dashboard</h2>
+                <p className="text-sm text-gray-600">Apply scholarship </p>
               </div>
             </div>
 
@@ -398,7 +397,7 @@ export default function DashboardLayout() {
                   }}
                   aria-label="User menu"
                 >
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+                  <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
                     {student?.username?.charAt(0)?.toUpperCase() || "U"}
                   </div>
                   <div className="hidden md:block text-left">
@@ -482,14 +481,7 @@ export default function DashboardLayout() {
 
         {/* Footer */}
         <footer className="bg-white/80 backdrop-blur-lg border-t border-white/20 py-4 px-6 text-center text-sm text-gray-600">
-          <div className="max-w-6xl mx-auto">
-            <p>© {new Date().getFullYear()} PMSSS Portal. All rights reserved.</p>
-            <div className="flex justify-center gap-6 mt-2">
-              <Link to="/privacy" className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms of Service</Link>
-              <Link to="/contact" className="hover:text-blue-600 transition-colors">Contact</Link>
-            </div>
-          </div>
+          <p>© {new Date().getFullYear()} PMSSS Finance Portal. All rights reserved.</p>
         </footer>
       </main>
     </div>

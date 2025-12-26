@@ -7,7 +7,9 @@ export default function StudentDashboardHome() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEyMzYyNSwiZXhwIjoxNzU4MTI3MjI1fQ.3eYWrbaNdyLSHKWCk4a3n4VnFLSK_YDnYv3rj71Rvjg";
+  const token =
+    localStorage.getItem("token") ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEyMzYyNSwiZXhwIjoxNzU4MTI3MjI1fQ.3eYWrbaNdyLSHKWCk4a3n4VnFLSK_YDnYv3rj71Rvjg";
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -29,7 +31,7 @@ export default function StudentDashboardHome() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-64">
-        <Loader className="animate-spin h-12 w-12 text-blue-600" />
+        <Loader className="animate-spin h-12 w-12 text-indigo-600" />
       </div>
     );
   }
@@ -45,55 +47,60 @@ export default function StudentDashboardHome() {
   return (
     <div className="p-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl p-6 shadow-lg mb-6">
-        <h2 className="text-2xl font-bold">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl p-8 shadow-lg mb-8">
+        <h2 className="text-3xl font-bold tracking-tight">
           Welcome back, {student.firstName} 👋
         </h2>
-        <p className="text-sm mt-2">
+        <p className="text-sm mt-3 text-indigo-100">
           Manage your scholarship applications and track progress here.
         </p>
       </div>
 
       {/* Status Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
-          <div className="flex items-center gap-3">
-            <FileText className="text-blue-600" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+          <div className="flex items-center gap-4">
+            <FileText className="text-indigo-600 w-8 h-8" />
             <div>
               <h3 className="font-semibold text-gray-700">Applications</h3>
-              <p className="text-gray-900">{student.applications?.length || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {student.applications?.length || 0}
+              </p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="text-green-600" />
+        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+          <div className="flex items-center gap-4">
+            <CheckCircle className="text-green-600 w-8 h-8" />
             <div>
               <h3 className="font-semibold text-gray-700">Approved</h3>
-              <p className="text-gray-900">
-                {student.applications?.filter(a => a.status === "approved").length || 0}
+              <p className="text-2xl font-bold text-gray-900">
+                {student.applications?.filter((a) => a.status === "approved")
+                  .length || 0}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
-          <div className="flex items-center gap-3">
-            <Clock className="text-yellow-500" />
+        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+          <div className="flex items-center gap-4">
+            <Clock className="text-yellow-500 w-8 h-8" />
             <div>
               <h3 className="font-semibold text-gray-700">Pending</h3>
-              <p className="text-gray-900">
-                {student.applications?.filter(a => a.status === "pending").length || 0}
+              <p className="text-2xl font-bold text-gray-900">
+                {student.applications?.filter((a) => a.status === "pending")
+                  .length || 0}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
-          <div className="flex items-center gap-3">
-            <XCircle className="text-red-600" />
+        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1">
+          <div className="flex items-center gap-4">
+            <XCircle className="text-red-600 w-8 h-8" />
             <div>
               <h3 className="font-semibold text-gray-700">Rejected</h3>
-              <p className="text-gray-900">
-                {student.applications?.filter(a => a.status === "rejected").length || 0}
+              <p className="text-2xl font-bold text-gray-900">
+                {student.applications?.filter((a) => a.status === "rejected")
+                  .length || 0}
               </p>
             </div>
           </div>
@@ -104,9 +111,9 @@ export default function StudentDashboardHome() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link
           to="/student/apply"
-          className="bg-blue-50 hover:bg-blue-100 p-6 rounded-xl border border-blue-200 shadow-sm transition"
+          className="bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 p-6 rounded-2xl border border-indigo-200 shadow-sm transition transform hover:-translate-y-1"
         >
-          <h3 className="font-semibold text-lg text-blue-700 mb-2">
+          <h3 className="font-semibold text-lg text-indigo-700 mb-2">
             Apply for Scholarship
           </h3>
           <p className="text-gray-600 text-sm">
@@ -116,7 +123,7 @@ export default function StudentDashboardHome() {
 
         <Link
           to="/student/profile"
-          className="bg-green-50 hover:bg-green-100 p-6 rounded-xl border border-green-200 shadow-sm transition"
+          className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 p-6 rounded-2xl border border-green-200 shadow-sm transition transform hover:-translate-y-1"
         >
           <h3 className="font-semibold text-lg text-green-700 mb-2">
             View / Update Profile

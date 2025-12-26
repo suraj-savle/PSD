@@ -19,6 +19,9 @@ import {
   Calendar,
   Users,
   IdCard,
+  GraduationCap,
+  BookOpen,
+  ChevronRight
 } from "lucide-react";
 
 export default function StudentProfile() {
@@ -30,9 +33,10 @@ export default function StudentProfile() {
   const [success, setSuccess] = useState("");
   const [showAccountNumber, setShowAccountNumber] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [activeTab, setActiveTab] = useState("personal");
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YzlhZDI1OWJlOWUxZDZmYTkxNWQwZCIsImlhdCI6MTc1ODEyMzYyNSwiZXhwIjoxNzU4MTI3MjI1fQ.3eYWrbaNdyLSHKWCk4a3n4VnFLSK_YDnYv3rj71Rvjg";
+  const token = localStorage.getItem("token");
   useEffect(() => {
     const fetchStudent = async () => {
       if (!token) {
@@ -183,10 +187,13 @@ export default function StudentProfile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50">
         <div className="text-center">
-          <Loader className="animate-spin h-12 w-12 text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Loading your profile...</p>
+          <div className="relative">
+            <Loader className="animate-spin h-12 w-12 text-indigo-600 mx-auto" />
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full animate-ping opacity-20"></div>
+          </div>
+          <p className="mt-4 text-gray-600 font-medium">Loading your profile...</p>
         </div>
       </div>
     );
@@ -194,18 +201,20 @@ export default function StudentProfile() {
 
   if (!student) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
           <div className="flex items-center gap-3 text-red-500 mb-4">
-            <AlertCircle className="h-6 w-6" />
+            <div className="p-2 bg-red-100 rounded-full">
+              <AlertCircle className="h-5 w-5" />
+            </div>
             <h2 className="text-xl font-semibold">Error Loading Profile</h2>
           </div>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-6">
             {error || "Student data not available"}
           </p>
           <button
             onClick={() => navigate("/login")}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
           >
             Return to Login
           </button>
@@ -215,25 +224,32 @@ export default function StudentProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Student Profile
           </h1>
-          <p className="text-gray-600">
-            Manage your personal and banking information
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Manage your personal information, academic details, and banking information securely
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
           {/* Profile Header with Gradient */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-blue-600 text-2xl font-bold">
-                  {student.fullName?.charAt(0) || "U"}
+              <div className="relative">
+                <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border-2 border-white/30">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-indigo-600 text-2xl font-bold shadow-md">
+                    {student.fullName?.charAt(0) || "U"}
+                  </div>
+                </div>
+                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md">
+                  <div className="w-6 h-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                    <User className="h-3 w-3 text-white" />
+                  </div>
                 </div>
               </div>
 
@@ -255,7 +271,7 @@ export default function StudentProfile() {
                 {!isEditing ? (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg transition-all hover:scale-105"
+                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg transition-all hover:scale-105 border border-white/30 shadow-sm"
                   >
                     <Edit size={18} />
                     Edit Profile
@@ -263,7 +279,7 @@ export default function StudentProfile() {
                 ) : (
                   <button
                     onClick={handleCancelEdit}
-                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg transition-all hover:scale-105"
+                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg transition-all hover:scale-105 border border-white/30"
                   >
                     <X size={18} />
                     Cancel
@@ -276,244 +292,330 @@ export default function StudentProfile() {
           {/* Success/Error Messages */}
           <div className="px-6 pt-6">
             {success && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <p className="text-green-700">{success}</p>
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3 animate-fade-in">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                </div>
+                <p className="text-green-700 font-medium">{success}</p>
               </div>
             )}
 
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-                <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
-                <p className="text-red-700">{error}</p>
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 animate-fade-in">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                </div>
+                <p className="text-red-700 font-medium">{error}</p>
               </div>
             )}
+          </div>
+
+          {/* Tab Navigation */}
+          <div className="px-6 border-b border-gray-200">
+            <div className="flex flex-wrap gap-2 md:gap-4">
+              <button
+                onClick={() => setActiveTab("personal")}
+                className={`px-4 py-3 rounded-t-lg font-medium flex items-center gap-2 transition-all ${activeTab === "personal" ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}
+              >
+                <User size={18} />
+                Personal Info
+              </button>
+              <button
+                onClick={() => setActiveTab("bank")}
+                className={`px-4 py-3 rounded-t-lg font-medium flex items-center gap-2 transition-all ${activeTab === "bank" ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}
+              >
+                <Building size={18} />
+                Bank Details
+              </button>
+              <button
+                onClick={() => setActiveTab("academic")}
+                className={`px-4 py-3 rounded-t-lg font-medium flex items-center gap-2 transition-all ${activeTab === "academic" ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}
+              >
+                <GraduationCap size={18} />
+                Academic Info
+              </button>
+            </div>
           </div>
 
           {/* Main Content */}
           <div className="p-6">
             <form onSubmit={handleUpdate} className="space-y-8">
               {/* Personal Information Card */}
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <User className="h-5 w-5 text-blue-600" />
+              {(activeTab === "personal" || activeTab === "academic") && (
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg">
+                      {activeTab === "personal" ? (
+                        <User className="h-5 w-5 text-white" />
+                      ) : (
+                        <GraduationCap className="h-5 w-5 text-white" />
+                      )}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      {activeTab === "personal" ? "Personal Information" : "Academic Information"}
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    Personal Information
-                  </h3>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <InfoField
-                    label="Full Name"
-                    value={student.fullName}
-                    icon={<User size={16} />}
-                  />
-                  <InfoField label="Username" value={student.username} />
-                  <InfoField
-                    label="Email"
-                    value={student.email}
-                    icon={<Mail size={16} />}
-                  />
-                  <InfoField
-                    label="Date of Birth"
-                    value={formatDate(student.dob)}
-                    icon={<Calendar size={16} />}
-                  />
-                  <InfoField label="Gender" value={student.gender} />
-                  <InfoField
-                    label="Aadhar Number"
-                    value={
-                      student.aadhar
-                        ? `****-****-${student.aadhar.slice(-4)}`
-                        : "N/A"
-                    }
-                    icon={<Shield size={16} />}
-                  />
-                  <InfoField
-                    label="Father's Name"
-                    value={student.fatherName}
-                    icon={<Users size={16} />}
-                  />
-                  <InfoField
-                    label="Mother's Name"
-                    value={student.motherName}
-                    icon={<Users size={16} />}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {activeTab === "personal" ? (
+                      <>
+                        <InfoField
+                          label="Full Name"
+                          value={student.fullName}
+                          icon={<User size={16} />}
+                        />
+                        <InfoField label="Username" value={student.username} />
+                        <InfoField
+                          label="Email"
+                          value={student.email}
+                          icon={<Mail size={16} />}
+                        />
+                        <InfoField
+                          label="Date of Birth"
+                          value={formatDate(student.dob)}
+                          icon={<Calendar size={16} />}
+                        />
+                        <InfoField label="Gender" value={student.gender} />
+                        <InfoField
+                          label="Aadhar Number"
+                          value={
+                            student.aadhar
+                              ? `****-****-${student.aadhar.slice(-4)}`
+                              : "N/A"
+                          }
+                          icon={<Shield size={16} />}
+                        />
+                        <InfoField
+                          label="Father's Name"
+                          value={student.fatherName}
+                          icon={<Users size={16} />}
+                        />
+                        <InfoField
+                          label="Mother's Name"
+                          value={student.motherName}
+                          icon={<Users size={16} />}
+                        />
 
-                  {/* Editable Mobile Field */}
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                      <Phone size={16} />
-                      Mobile Number
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="tel"
-                        name="mobile"
-                        value={form.mobile}
-                        onChange={handleChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        required
-                        pattern="[6-9][0-9]{9}"
-                        maxLength="10"
-                        placeholder="Enter 10-digit mobile number"
-                      />
+                        {/* Editable Mobile Field */}
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <Phone size={16} className="text-indigo-600" />
+                            Mobile Number
+                          </label>
+                          {isEditing ? (
+                            <input
+                              type="tel"
+                              name="mobile"
+                              value={form.mobile}
+                              onChange={handleChange}
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
+                              required
+                              pattern="[6-9][0-9]{9}"
+                              maxLength="10"
+                              placeholder="Enter 10-digit mobile number"
+                            />
+                          ) : (
+                            <p className="p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                              {student.mobile || "N/A"}
+                            </p>
+                          )}
+                        </div>
+                      </>
                     ) : (
-                      <p className="p-3 bg-white rounded-lg border border-gray-200">
-                        {student.mobile || "N/A"}
-                      </p>
+                      <>
+                        <InfoField
+                          label="Course"
+                          value={student.course || "Computer Science"}
+                          icon={<BookOpen size={16} />}
+                        />
+                        <InfoField
+                          label="Semester"
+                          value={student.semester || "4th"}
+                          icon={<GraduationCap size={16} />}
+                        />
+                        <InfoField
+                          label="Roll Number"
+                          value={student.rollNumber || "CS2023456"}
+                          icon={<IdCard size={16} />}
+                        />
+                        <InfoField
+                          label="Academic Year"
+                          value={student.academicYear || "2023-2024"}
+                          icon={<Calendar size={16} />}
+                        />
+                        <InfoField
+                          label="Department"
+                          value={student.department || "Computer Science & Engineering"}
+                          icon={<Building size={16} />}
+                        />
+                        <InfoField
+                          label="CGPA"
+                          value={student.cgpa || "8.75"}
+                          icon={<GraduationCap size={16} />}
+                        />
+                      </>
                     )}
                   </div>
+
+                  {/* Address Card */}
+                  {activeTab === "personal" && (
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-purple-100 rounded-lg">
+                          <MapPin className="h-5 w-5 text-purple-600" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Address Information
+                        </h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                          <MapPin size={16} className="text-purple-600" />
+                          Parent's Address
+                        </label>
+                        {isEditing ? (
+                          <textarea
+                            name="parentAddress"
+                            value={form.parentAddress}
+                            onChange={handleChange}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none shadow-sm"
+                            rows={3}
+                            required
+                            placeholder="Enter your complete address"
+                          />
+                        ) : (
+                          <p className="p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-line shadow-sm">
+                            {student.parentAddress || "N/A"}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
 
               {/* Bank Information Card */}
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Building className="h-5 w-5 text-green-600" />
+              {activeTab === "bank" && (
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg">
+                      <Building className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      Bank Information
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    Bank Information
-                  </h3>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    {
-                      key: "bankName",
-                      label: "Bank Name",
-                      icon: <Building size={16} />,
-                    },
-                    { key: "branchName", label: "Branch Name" },
-                    { key: "accountHolder", label: "Account Holder Name" },
-                    {
-                      key: "ifsc",
-                      label: "IFSC Code",
-                      icon: <CreditCard size={16} />,
-                    },
-                  ].map(({ key, label, icon }) => (
-                    <div key={key} className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      {
+                        key: "bankName",
+                        label: "Bank Name",
+                        icon: <Building size={16} className="text-indigo-600" />,
+                      },
+                      { 
+                        key: "branchName", 
+                        label: "Branch Name",
+                        icon: <MapPin size={16} className="text-indigo-600" />
+                      },
+                      { 
+                        key: "accountHolder", 
+                        label: "Account Holder Name",
+                        icon: <User size={16} className="text-indigo-600" />
+                      },
+                      {
+                        key: "ifsc",
+                        label: "IFSC Code",
+                        icon: <CreditCard size={16} className="text-indigo-600" />,
+                      },
+                    ].map(({ key, label, icon }) => (
+                      <div key={key} className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                          {icon}
+                          {label}
+                        </label>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name={key}
+                            value={form[key]}
+                            onChange={handleChange}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
+                            required
+                          />
+                        ) : (
+                          <p className="p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            {student[key] || "N/A"}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+
+                    {/* Account Number Field */}
+                    <div className="space-y-2">
                       <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                        {icon}
-                        {label}
+                        <CreditCard size={16} className="text-indigo-600" />
+                        Account Number
                       </label>
                       {isEditing ? (
                         <input
                           type="text"
-                          name={key}
-                          value={form[key]}
+                          name="accountNumber"
+                          value={form.accountNumber}
                           onChange={handleChange}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
                           required
+                          pattern="[0-9]{9,18}"
+                          maxLength="18"
                         />
                       ) : (
-                        <p className="p-3 bg-white rounded-lg border border-gray-200">
-                          {student[key] || "N/A"}
-                        </p>
+                        <div className="flex items-center gap-2 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                          <span>{maskAccountNumber(student.accountNumber)}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowAccountNumber(!showAccountNumber)
+                            }
+                            className="text-indigo-600 hover:text-indigo-800 transition-colors"
+                          >
+                            {showAccountNumber ? (
+                              <EyeOff size={16} />
+                            ) : (
+                              <Eye size={16} />
+                            )}
+                          </button>
+                          {showAccountNumber && (
+                            <span className="text-sm text-gray-500 ml-2">
+                              {student.accountNumber}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
-                  ))}
 
-                  {/* Account Number Field */}
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                      <CreditCard size={16} />
-                      Account Number
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="accountNumber"
-                        value={form.accountNumber}
-                        onChange={handleChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        required
-                        pattern="[0-9]{9,18}"
-                        maxLength="18"
-                      />
-                    ) : (
-                      <div className="flex items-center gap-2 p-3 bg-white rounded-lg border border-gray-200">
-                        <span>{maskAccountNumber(student.accountNumber)}</span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setShowAccountNumber(!showAccountNumber)
-                          }
-                          className="text-blue-600 hover:text-blue-800 transition-colors"
-                        >
-                          {showAccountNumber ? (
-                            <EyeOff size={16} />
-                          ) : (
-                            <Eye size={16} />
-                          )}
-                        </button>
-                        {showAccountNumber && (
-                          <span className="text-sm text-gray-500 ml-2">
-                            {student.accountNumber}
-                          </span>
-                        )}
+                    {/* Confirm Account Number (Editing only) */}
+                    {isEditing && (
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                          <CreditCard size={16} className="text-indigo-600" />
+                          Confirm Account Number
+                        </label>
+                        <input
+                          type="text"
+                          name="confirmAccountNumber"
+                          value={form.confirmAccountNumber}
+                          onChange={handleChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
+                          required
+                          pattern="[0-9]{9,18}"
+                          maxLength="18"
+                        />
                       </div>
                     )}
                   </div>
-
-                  {/* Confirm Account Number (Editing only) */}
-                  {isEditing && (
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                        <CreditCard size={16} />
-                        Confirm Account Number
-                      </label>
-                      <input
-                        type="text"
-                        name="confirmAccountNumber"
-                        value={form.confirmAccountNumber}
-                        onChange={handleChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        required
-                        pattern="[0-9]{9,18}"
-                        maxLength="18"
-                      />
-                    </div>
-                  )}
                 </div>
-              </div>
-
-              {/* Address Card */}
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <MapPin className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    Address Information
-                  </h3>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <MapPin size={16} />
-                    Parent's Address
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      name="parentAddress"
-                      value={form.parentAddress}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
-                      rows={3}
-                      required
-                      placeholder="Enter your complete address"
-                    />
-                  ) : (
-                    <p className="p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-line">
-                      {student.parentAddress || "N/A"}
-                    </p>
-                  )}
-                </div>
-              </div>
+              )}
 
               {/* Submit Buttons */}
               {isEditing && (
@@ -521,14 +623,14 @@ export default function StudentProfile() {
                   <button
                     type="button"
                     onClick={handleCancelEdit}
-                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all hover:shadow-sm"
+                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all hover:shadow-sm font-medium"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUpdating}
-                    className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-all hover:shadow-lg"
+                    className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-all hover:shadow-lg font-medium shadow-md"
                   >
                     {isUpdating ? (
                       <Loader className="animate-spin h-5 w-5" />
@@ -542,6 +644,9 @@ export default function StudentProfile() {
             </form>
           </div>
         </div>
+
+        {/* Quick Stats Footer */}
+        
       </div>
     </div>
   );
@@ -554,7 +659,7 @@ const InfoField = ({ label, value, icon }) => (
       {icon}
       {label}
     </label>
-    <p className="p-3 bg-white rounded-lg border border-gray-200">
+    <p className="p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
       {value || "N/A"}
     </p>
   </div>

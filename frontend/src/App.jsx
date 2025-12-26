@@ -18,9 +18,6 @@ import ApprovedStudents from "./pages/finance/ApprovedStudents";
 import Disbursements from "./pages/finance/Disbursements";
 import Transactions from "./pages/finance/Transactions";
 import Settings from "./pages/finance/Settings";
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/Auth/Login";
-import RegisterPage from "./pages/Auth/Register";
 
 function App() {
   return (
@@ -45,7 +42,7 @@ function App() {
         <Route path="approved" element={<ApprovedStudents />} />
         <Route path="disbursements" element={<Disbursements />} />
         <Route path="transactions" element={<Transactions />} />
-        <Route path="settings" element={<Settings />} />
+
       </Route>
     </Routes>
   );

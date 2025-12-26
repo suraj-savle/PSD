@@ -3,7 +3,6 @@ import {
   DollarSign,
   Users,
   FileText,
-  Settings,
   LogOut,
   Home,
   Menu,
@@ -61,7 +60,6 @@ export default function FinanceDashboard() {
     { title: "Approved Students", icon: <Users size={20} />, path: "/finance/approved" },
     { title: "Disbursements", icon: <DollarSign size={20} />, path: "/finance/disbursements" },
     { title: "Transactions", icon: <FileText size={20} />, path: "/finance/transactions" },
-    { title: "Settings", icon: <Settings size={20} />, path: "/finance/settings" },
   ];
 
   const notifications = [
